@@ -1,46 +1,30 @@
 import { gql } from '@apollo/client'
 
+import { BASIC_USER_FIELDS, PREVIEW_POST_FIELDS, CORE_POST_FIELDS } from './fragments'
+
 export const SUGGEST_POSTS = gql`
+    ${PREVIEW_POST_FIELDS}
     query suggestPosts {
         suggestPosts {
-            _id  
-            likesCount 
-            commentsCount  
-            files
+            ...PreviewPostFields
         }
     }
 `
 
 export const GET_POST = gql`
+    ${BASIC_USER_FIELDS}
+    ${CORE_POST_FIELDS}
     query getPost($postId:ID!){
         getPost(postId:$postId) {
-            _id
-            caption
-            files
-            tags
-            likesCount
-            commentsCount
-            isMine
-            isLiked
-            isSaved
-            likes{
-                username
-            }
+            ...CorePostFields
             user{
-                _id
-                fullname
-                username
-                avatar
-                isMe
+                ...BasicUserFields
             }
             comments{
                 _id 
                 text 
                 user {
-                    _id 
-                    username 
-                    fullname 
-                    avatar 
+                  ...BasicUserFields
                 }
             }
         }
@@ -48,25 +32,13 @@ export const GET_POST = gql`
 `
 
 export const CREATE_POST = gql`
+    ${BASIC_USER_FIELDS}
+    ${CORE_POST_FIELDS}
     mutation createPost($caption:String,$files:[String!],$tags:[String]){
         createPost(caption:$caption,files:$files,tags:$tags){
-            _id
-            caption
-            files
-            tags
-            likesCount
-            commentsCount
-            isMine
-            isLiked
-            isSaved
-            likes{
-                username
-            }
+            ...BasicUserFields
             user{
-                fullname
-                username
-                avatar
-                isMe
+                ...BasicUserFields
             }
         }
     }

@@ -1,6 +1,9 @@
 import { gql } from '@apollo/client'
 
+import { BASIC_USER_FIELDS } from './fragments'
+
 export const ADD_COMMENT = gql`
+    ${BASIC_USER_FIELDS}
     mutation addNewComment($postId:ID!,$text:String!) {
         addComment(postId:$postId,text:$text) {
             _id 
@@ -9,10 +12,7 @@ export const ADD_COMMENT = gql`
                 _id 
             }
             user { 
-                _id 
-                username
-                fullname
-                avatar
+                ...BasicUserFields
             }
         }
     }

@@ -1,16 +1,15 @@
 import { gql } from '@apollo/client'
 
+import { BASIC_USER_FIELDS, CORE_POST_FIELDS, PREVIEW_POST_FIELDS } from './fragments'
+
 export const GET_ME = gql`
+    ${BASIC_USER_FIELDS}
+
     query getMe {
         me {
-            _id 
-            isMe 
-            username 
-            fullname
+            ...BasicUserFields
             bio
             email
-            avatar 
-            isFollowing 
             followingsCount 
             followersCount 
             postsCount 
@@ -19,115 +18,67 @@ export const GET_ME = gql`
 `
 
 export const GET_NEW_FEED = gql`
+    ${BASIC_USER_FIELDS}
+    ${CORE_POST_FIELDS}
     query getNewFeed {
         feed {
-            _id 
-            caption 
-            files 
-            tags     
-            isSaved
-            isLiked
-            isMine
-            likesCount
-            commentsCount
+            ...CorePostFields
             comments{
                 _id 
                 text 
                 user{
-                    _id 
-                    username 
-                    avatar
+                    ...BasicUserFields
                 }
             }
             user {
-                _id 
-                isMe 
-                username 
-                fullname
-                avatar 
-                isFollowing
+                ...BasicUserFields
             }
         }
     }
 `
 
 export const GET_PROFILE = gql`
+    ${BASIC_USER_FIELDS}
+    ${PREVIEW_POST_FIELDS}
     query getProfile($userId:ID!) {
         getProfile(userId:$userId){
-            _id 
-            isMe 
-            username 
-            fullname
+            ...BasicUserFields
             bio
-            avatar 
             isFollowing 
             followingsCount 
             followersCount 
             postsCount 
             posts {
-                _id 
-                caption 
-                files 
-                tags 
-                likesCount
-                isLiked 
-                isMine 
-                isSaved 
-                commentsCount
-                user {
-                    _id 
-                    username 
-                    fullname
-                    isMe 
-                    isFollowing
-                }
-
+                ...PreviewPostFields
             }
             savedPosts {
-                _id 
-                caption 
-                files 
-                tags 
-                likesCount
-                isLiked 
-                isMine 
-                isSaved 
-                commentsCount
-                user {
-                    _id 
-                    username 
-                    fullname
-                    isMe 
-                    isFollowing
-                }
+                ...PreviewPostFields
             }
         }
     }
     
 `
 export const GET_FOLLOWINGS = gql`
+    ${BASIC_USER_FIELDS}
+
     query getFollowings($userId:ID!) {
         getProfile(userId:$userId){
             followingsCount
             followings {
-                _id 
-                username 
-                isFollowing
-                avatar 
+                ...BasicUserFields
             }
         }
     }
 `
 
 export const GET_FOLLOWERS = gql`
+    ${BASIC_USER_FIELDS}
+
     query getFollowers($userId:ID!) {
         getProfile(userId:$userId){
             followersCount
             followers {
-                _id 
-                username 
-                isFollowing
-                avatar 
+                ...BasicUserFields
             }
         }
     }
@@ -135,15 +86,11 @@ export const GET_FOLLOWERS = gql`
 
 
 export const SUGGEST_USERS = gql`
+    ${BASIC_USER_FIELDS}
+
     query getSuggestUsers {
         suggestUsers {
-            _id
-            isMe 
-            username 
-            fullname 
-            bio
-            avatar 
-            isFollowing 
+            ...BasicUserFields
         }
     }
 `
@@ -160,14 +107,15 @@ export const UNFOLLOW_USER = gql`
     }
 `
 export const EDIT_PROFILE = gql`
+    ${BASIC_USER_FIELDS}
+
     mutation editProfile($fullname:String,$username:String,$bio:String,$avatar:String,$email:String) {
         editProfile(fullname:$fullname,username:$username,bio:$bio,avatar:$avatar,email:$email){
             _id 
-            isMe 
             username 
-            bio
-            avatar 
-            isFollowing 
+            fullname 
+            bio 
+            email
         }
     }
 `
@@ -178,16 +126,9 @@ export const GET_POST_USER = gql`
             _id 
             posts{
                 _id 
-                caption
                 files 
-                tags 
-                user {
-                    _id 
-                    username 
-                    fullname
-                    avatar
-                    bio
-                }
+                likesCount
+                commentsCount
             }
         }
     }

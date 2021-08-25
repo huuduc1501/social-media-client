@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import styled, { css } from "styled-components";
 import { useMutation, gql } from "@apollo/client";
 import { Avatar, message, Modal } from "antd";
-import Slider from "react-slick";
+// import Slider from "react-slick";
 
 import {
   DELETE_POST,
@@ -29,7 +29,7 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 
 const Wrapper = styled.div`
   width: 100%;
-  background-color:white;
+  background-color: white;
   max-width: 100%;
   border: 1px solid ${(props) => props.theme.borderColor};
   border-radius: ${(props) => props.theme.borderRadius};
@@ -277,17 +277,16 @@ const Post = ({ post, isSpecific }) => {
       // console.log(carouselRef.current.listRef);
       // const imgs = document.getElementsByClassName(`image-slider-${post._id}`);
       const imgs = carouselRef.current.listRef;
-      console.log(imgs);
+
       // console.log(imgs[0].height);
       let minHeight = imgs[0]?.height;
-      console.log(imgs.length > 2);
+
       if (imgs.length > 2) {
         for (let i = 0; i < imgs.length; i++) {
-          console.log(imgs[i].height);
           if (minHeight < imgs[i].height && imgs[i].height !== 0)
             minHeight = imgs[i].height;
         }
-        console.log(minHeight);
+
         const postBody = document.getElementById(`body-${post._id}`);
         if (postBody && minHeight !== 0) postBody.style.height = minHeight;
       }
@@ -325,6 +324,7 @@ const Post = ({ post, isSpecific }) => {
         },
       });
       setIsModalVisible(false);
+      if (history.location.pathname !== "/") history.push("/");
       message.success("xóa thành công");
     } catch (error) {
       console.log(error);
@@ -383,7 +383,11 @@ const Post = ({ post, isSpecific }) => {
         <div className="post-caption">
           {post.caption?.split(" ").map((word, index) => {
             if (post.tags.includes(word))
-              return <span className="post-tag">{word + " "}</span>;
+              return (
+                <span key={index} className="post-tag">
+                  {word + " "}
+                </span>
+              );
             return word + " ";
           })}
         </div>

@@ -11,7 +11,7 @@ const SpecificPost = () => {
     variables: { postId },
   });
   if (loading) return <Skeleton avatar paragraph={4} />;
-  if (error) return error;
+  if (error) return error.message;
   return <Post isSpecific={true} post={data.getPost} />;
 };
 
