@@ -15,7 +15,6 @@ import "slick-carousel/slick/slick-theme.css";
 
 const App = () => {
     const { data: { isLoggedIn } } = useQuery(IS_LOGGED_IN)
-    console.log(process.env.REACT_APP_CLOUDINARY_ENDPOINT)
 
     return (
         <>

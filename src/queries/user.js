@@ -20,9 +20,15 @@ export const GET_ME = gql`
 export const GET_NEW_FEED = gql`
     ${BASIC_USER_FIELDS}
     ${CORE_POST_FIELDS}
-    query getNewFeed {
-        feed {
-            ...CorePostFields
+    query getNewFeed($cursor:String,$limit:Int!) {
+
+        feed(cursor:$cursor,limit:$limit) {
+            paging {
+                hasMore 
+                nextCursor
+            }
+            posts{
+                ...CorePostFields
             comments{
                 _id 
                 text 
@@ -32,6 +38,7 @@ export const GET_NEW_FEED = gql`
             }
             user {
                 ...BasicUserFields
+            }
             }
         }
     }
@@ -107,8 +114,6 @@ export const UNFOLLOW_USER = gql`
     }
 `
 export const EDIT_PROFILE = gql`
-    ${BASIC_USER_FIELDS}
-
     mutation editProfile($fullname:String,$username:String,$bio:String,$avatar:String,$email:String) {
         editProfile(fullname:$fullname,username:$username,bio:$bio,avatar:$avatar,email:$email){
             _id 

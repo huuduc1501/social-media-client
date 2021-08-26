@@ -4,7 +4,26 @@ import { setContext } from '@apollo/client/link/context';
 
 import { IS_LOGGED_IN } from "./queries/client";
 
-export const cache = new InMemoryCache()
+export const cache = new InMemoryCache({
+    typePolicies: {
+        Query: {
+            fields: {
+                feed: {
+                    // Don't cache separate results based on
+                    // any of this field's arguments.
+                    keyArgs: false,
+                    // Concatenate the incoming list items with
+                    // the existing list items.
+                    merge(existing = {}, incoming) {
+                        if (Object.entries(existing).length === 0)
+                            return incoming
+                        return { paging: incoming.paging, posts: [...existing.posts, ...incoming.posts] }
+                    },
+                }
+            }
+        }
+    }
+})
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
     if (graphQLErrors)
