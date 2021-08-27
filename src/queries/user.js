@@ -138,3 +138,12 @@ export const GET_POST_USER = gql`
         }
     }
 `
+
+export const SEARCH_USER = gql`
+    ${BASIC_USER_FIELDS}
+    query searchUsers($searchTerm:String!) {
+        searchUsers(searchTerm:$searchTerm){ 
+            ...BasicUserFields
+        }
+    }
+`

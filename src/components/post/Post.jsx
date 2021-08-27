@@ -443,7 +443,7 @@ const Post = ({ post, isSpecific }) => {
         <div className="post-comment">
           <div className="comment-list">
             {!!post.commentsCount &&
-              post.comments.map((comment, index) => (
+              post.comments?.map((comment, index) => (
                 <PostComment key={index} comment={comment} />
               ))}
           </div>

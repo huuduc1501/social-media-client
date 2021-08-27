@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { Input } from "antd";
+import queryString from "query-string";
 import { useHistory } from "react-router-dom";
 
 const SearchField = () => {
-  const [value, setValue] = useState("");
   const history = useHistory();
-  console.log(history);
+  const [value, setValue] = useState(
+    queryString.parse(history.location.search).searchTerm
+  );
   const handleSearch = (e) => {
     if (e.key === "Enter") history.push(`/timkiem?searchTerm=${value}`);
     return;

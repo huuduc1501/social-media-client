@@ -66,3 +66,16 @@ export const TOGGLE_SAVE_POST = gql`
         toggleSave(postId:$postId)
     }
 `
+
+export const SEARCH_POSTS = gql`
+    ${BASIC_USER_FIELDS}
+    ${CORE_POST_FIELDS}
+    query searchPosts($searchTerm:String!){
+        searchPosts(searchTerm:$searchTerm){
+            ...CorePostFields
+            user{
+                ...BasicUserFields
+            }
+        }
+    }
+`
