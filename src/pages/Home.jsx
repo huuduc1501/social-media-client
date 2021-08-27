@@ -66,10 +66,13 @@ const Home = () => {
             <NewPost />
             {loading ? (
               <>
-                <Skeleton avatar paragraph={4} />
-                <Skeleton avatar paragraph={4} />
-                <Skeleton avatar paragraph={4} />
-                <Skeleton avatar paragraph={4} />
+                {[
+                  ...Array(2)
+                    .fill(1)
+                    .map((_, index) => (
+                      <Skeleton key={index} active avatar paragraph={4} />
+                    )),
+                ]}
               </>
             ) : (
               <InfiniteScroll
@@ -109,10 +112,11 @@ const Home = () => {
             <h3>Đề xuất</h3>
             {sgLoading ? (
               <>
-                <Skeleton avatar paragraph={1} />
-                <Skeleton avatar paragraph={1} />
-                <Skeleton avatar paragraph={1} />
-                <Skeleton avatar paragraph={1} />
+                {[
+                  ...Array(4)
+                    .fill(1)
+                    .map((_, index) => <Skeleton key={index} active avatar />),
+                ]}
               </>
             ) : (
               ""

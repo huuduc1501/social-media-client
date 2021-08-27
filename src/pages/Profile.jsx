@@ -1,7 +1,7 @@
 import { useQuery } from "@apollo/client";
 import React, { useState } from "react";
 import styled from "styled-components";
-import { Divider } from "antd";
+import { Divider, Skeleton } from "antd";
 import { useParams } from "react-router-dom";
 import { BookmarkOulined, PostIcon } from "../components/Icon";
 import { GET_PROFILE } from "../queries/user";
@@ -59,8 +59,14 @@ const Profile = () => {
     errorPolicy: "all",
   });
   const user = data ? data.getProfile : {};
-  console.log(user);
-  if (loading) return "loading...";
+
+  if (loading)
+    return (
+      <div>
+        <Skeleton avatar paragraph={4} active />
+      </div>
+    );
+
   if (error) return "error";
 
   console.log(user.savedPosts.length === 0);

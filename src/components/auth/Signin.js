@@ -1,5 +1,5 @@
 import React from 'react';
-import { Input, Form, Checkbox, Button, Typography } from 'antd'
+import { Input, Form, Button, Typography, notification } from 'antd'
 import styled from 'styled-components'
 import { SIGNIN } from '../../queries/auth'
 import { useMutation } from '@apollo/client';
@@ -34,8 +34,12 @@ const Signin = ({ changeToSignup }) => {
                     password: values.password,
                 },
             })
+            return true
         } catch (error) {
-            console.log(error)
+            notification.error({
+                message: error.message,
+            })
+            return false
         }
 
     };
@@ -56,9 +60,6 @@ const Signin = ({ changeToSignup }) => {
                 }}
                 wrapperCol={{
                     span: 16,
-                }}
-                initialValues={{
-                    remember: true,
                 }}
                 onFinish={onFinish}
                 onFinishFailed={onFinishFailed}
@@ -89,34 +90,16 @@ const Signin = ({ changeToSignup }) => {
                     <Input.Password />
                 </Form.Item>
 
-                <Form.Item
-                    name="remember"
-                    valuePropName="checked"
-                    wrapperCol={{
-                        offset: 8,
-                        span: 16,
-                    }}
-                >
-                    <Checkbox>Lưu thông tin</Checkbox>
-                </Form.Item>
-
-                <Form.Item
-                    wrapperCol={{
-                        offset: 8,
-                        span: 16,
-                    }}
-                >
+                <Form.Item className='form-button'>
                     <Button type="primary" htmlType="submit">
-                        Submit
+                        Đăng nhập
                     </Button>
                 </Form.Item>
             </Form>
 
-            <Text>
-                <Text underline onClick={changeToSignup}>Đăng kí</Text>
-                /
-                <Text underline>quên mật khẩu</Text>
-            </Text>
+            <div>
+                <Text style={{ cursor: 'pointer' }} type='secondary' underline onClick={changeToSignup}>Đăng kí</Text>
+            </div>
         </Wrapper >
     );
 };

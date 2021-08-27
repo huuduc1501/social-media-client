@@ -10,7 +10,7 @@ const SpecificPost = () => {
   const { loading, error, data } = useQuery(GET_POST, {
     variables: { postId },
   });
-  if (loading) return <Skeleton avatar paragraph={4} />;
+  if (loading) return <Skeleton active avatar paragraph={4} />;
   if (error) return error.message;
   return <Post isSpecific={true} post={data.getPost} />;
 };

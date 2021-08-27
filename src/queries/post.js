@@ -4,9 +4,15 @@ import { BASIC_USER_FIELDS, PREVIEW_POST_FIELDS, CORE_POST_FIELDS } from './frag
 
 export const SUGGEST_POSTS = gql`
     ${PREVIEW_POST_FIELDS}
-    query suggestPosts {
-        suggestPosts {
-            ...PreviewPostFields
+    query suggestPosts($limit:Int!,$cursor:String) {
+        suggestPosts(limit:$limit,cursor:$cursor) {
+            paging{
+                hasMore 
+                nextCursor
+            }
+            posts {
+                ...PreviewPostFields    
+            }
         }
     }
 `

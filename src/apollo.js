@@ -4,6 +4,12 @@ import { setContext } from '@apollo/client/link/context';
 
 import { IS_LOGGED_IN } from "./queries/client";
 
+function merge(existing = {}, incoming) {
+    if (Object.entries(existing).length === 0)
+        return incoming
+    return { paging: incoming.paging, posts: [...existing.posts, ...incoming.posts] }
+}
+
 export const cache = new InMemoryCache({
     typePolicies: {
         Query: {
@@ -14,11 +20,11 @@ export const cache = new InMemoryCache({
                     keyArgs: false,
                     // Concatenate the incoming list items with
                     // the existing list items.
-                    merge(existing = {}, incoming) {
-                        if (Object.entries(existing).length === 0)
-                            return incoming
-                        return { paging: incoming.paging, posts: [...existing.posts, ...incoming.posts] }
-                    },
+                    merge,
+                },
+                suggestPosts: {
+                    keyArgs: false,
+                    merge,
                 }
             }
         }

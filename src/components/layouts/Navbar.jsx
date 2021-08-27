@@ -17,9 +17,11 @@ import {
   LogoutOutLined,
 } from "../Icon";
 import { IS_LOGGED_IN } from "../../queries/client";
+import SearchField from "../SearchField";
 
 const Wrapper = styled.div`
-  position: fixed;
+  position: sticky;
+  display: block;
   top: 0;
   left: 0;
   width: 100%;
@@ -51,6 +53,9 @@ const Wrapper = styled.div`
   .ant-avatar {
     cursor: pointer;
   }
+  /* @media (min-height: 101vh) {
+    padding-right: 16px;
+  } */
 `;
 
 const DropdownWrapper = styled.div`
@@ -109,7 +114,7 @@ const Navbar = () => {
         </div>
         <div className="search">
           <div className="navbar-item">
-            <Input />
+            <SearchField />
           </div>
         </div>
         <div className="right">
@@ -120,7 +125,7 @@ const Navbar = () => {
               </Link>
             </div>
             <div className="navbar-item">
-              <Link to="/">
+              <Link to="/chat">
                 <CommentOutlined />
               </Link>
             </div>

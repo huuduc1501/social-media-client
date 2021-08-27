@@ -4,6 +4,9 @@ export default createGlobalStyle`
     html {
         font-size:16px;
     }
+    body{
+        display: flow-root;
+    }
     *,*:before,*:after {
         padding: 0;
         margin: 0;

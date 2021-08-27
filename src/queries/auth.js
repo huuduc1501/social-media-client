@@ -17,6 +17,7 @@ export const SIGNIN = gql`
 export const ME = gql`
     query getMe{
         me{
+            _id
             username
             fullname
             avatar 
@@ -24,5 +25,17 @@ export const ME = gql`
             email
             createdAt
         }
+    }
+`
+
+export const VALIDATE_EMAIL = gql`
+    mutation validateEmail($email:String!){
+        validateEmail(email:$email)
+    }
+`
+
+export const VALIDATE_USERNAME = gql`
+    mutation validateUsername($username:String!){
+        validateUsername(username:$username)
     }
 `

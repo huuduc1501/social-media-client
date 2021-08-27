@@ -6,18 +6,20 @@ import styled from "styled-components";
 
 import Navbar from "./components/layouts/Navbar";
 import Loading from "./components/Loading";
+import ChatPage from "./pages/ChatPage";
 import EditProfile from "./pages/EditProfile";
 import Explore from "./pages/Explore";
 import Home from "./pages/Home.jsx";
 import Profile from "./pages/Profile.jsx";
+import SearchPage from "./pages/SearchPage";
 import SpecificPost from "./pages/SpecificPost";
 import { GET_ME } from "./queries/user";
 
 const PageWrapper = styled.div`
-  /* width: 100vw; */
-  padding-top: 5rem;
+  width: 100%;
+  padding-top: 1rem;
   background-color: ${(props) => props.theme.bg};
-  min-height: 100vh;
+  min-height: calc(100vh - 60px);
 `;
 
 const RootRouter = () => {
@@ -33,6 +35,12 @@ const RootRouter = () => {
       <PageWrapper>
         <div className="container">
           <Switch>
+            <Route path='/timkiem'>
+              <SearchPage />
+            </Route>
+            <Route path='/chat'>
+              <ChatPage />
+            </Route>
             <Route path='/explore'>
               <Explore />
             </Route>
