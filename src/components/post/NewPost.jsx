@@ -54,17 +54,18 @@ const NewPost = () => {
   const [loadingCreatePost, setLoadingCreatePost] = useState(false);
   const [createPostMutattion] = useMutation(CREATE_POST, {
     update: (cache, { data: { createPost } }) => {
-      const { feed } = cache.readQuery({ query: GET_NEW_FEED });
+      const {
+        feed: { posts },
+      } = cache.readQuery({ query: GET_NEW_FEED });
       cache.writeQuery({
         query: GET_NEW_FEED,
-        data: { feed: [createPost, ...feed] },
+        data: { feed: { posts: [createPost, ...posts] } },
       });
     },
   });
   useEffect(() => {
     if (openUploadBox) {
       const el = document.getElementsByClassName("ant-upload-select");
-      console.log(el[0]);
       el[0].firstElementChild.click();
     }
   }, [openUploadBox]);
@@ -72,10 +73,8 @@ const NewPost = () => {
     setImageList(info.fileList);
   };
   const onHandlePreview = (file) => {
-    if (!file.preview) {
-      file.preview = URL.createObjectURL(file.originFileObj);
-    }
-    setPreviewImage(file.preview);
+    if (previewImage) URL.revokeObjectURL(previewImage);
+    setPreviewImage(URL.createObjectURL(file.originFileObj));
     setPreviewVisible(true);
   };
   const onHandleCancel = () => setPreviewVisible(false);
@@ -88,9 +87,14 @@ const NewPost = () => {
 
   const onHandleBeforeUpload = (file) => {
     if (!file.type.includes("image")) {
-      return message.error("vui lòng chọn hình ảnh");
+      message.error("vui lòng chọn hình ảnh");
+      return Upload.LIST_IGNORE;
     }
-    console.log(file);
+    // if (file.size > 2 * 1024 * 1024) {
+    //   message.error("chọn ảnh có kích thước nhở hơn 2mb");
+    //   return Upload.LIST_IGNORE;
+    // }
+
     return false;
   };
 
@@ -109,25 +113,26 @@ const NewPost = () => {
           const fileUrl = await uploadImage(imageList[i].originFileObj);
           files.push(fileUrl);
         }
+        await createPostMutattion({
+          variables: {
+            caption,
+            tags,
+            files,
+          },
+        });
+        setTextAreaValue("");
+        setImageList([]);
+        setOpenUploadBox(false);
+        message.success("thành công");
+        if (previewImage) URL.revokeObjectURL(previewImage);
+      } else {
+        message.error("Vui lòng chọn hình ảnh!");
       }
-      await createPostMutattion({
-        variables: {
-          caption,
-          tags,
-          files,
-        },
-      });
     } catch (error) {
       message.error(error.message);
       console.error(error);
-      setLoadingCreatePost(false);
-      return;
     }
-    setTextAreaValue("");
-    setImageList([]);
-    setOpenUploadBox(false);
     setLoadingCreatePost(false);
-    message.success("thành công");
   };
 
   return (

@@ -28,7 +28,6 @@ const SearchPage = () => {
     fetchPolicy: "cache-first",
   });
   if (loading || loadingUser) return "...loading";
-  console.log(searchTerm);
   return (
     <Wrapper>
       <Row gutter={24}>

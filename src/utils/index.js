@@ -7,7 +7,6 @@ export const uploadImage = async (file) => {
             method: "POST",
             body: imageData
         })
-
         return (await data.json()).url
     } catch (error) {
         console.error(error)

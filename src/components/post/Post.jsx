@@ -26,6 +26,8 @@ import PostComment from "./PostComment";
 import { useHistory } from "react-router-dom";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
+import { CORE_POST_FIELDS } from "../../queries/fragments";
+import { GET_ME, GET_PROFILE } from "../../queries/user";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -248,17 +250,40 @@ const Post = ({ post, isSpecific }) => {
   });
   const [toggleSaveMutation] = useMutation(TOGGLE_SAVE_POST, {
     update: (cache, { data: { toggleSave } }) => {
-      cache.writeFragment({
-        id: `Post:${post._id}`,
-        fragment: gql`
-          fragment moPost on Post {
-            isSaved
-          }
-        `,
-        data: {
-          isSaved: !post.isSaved,
-        },
+      const {
+        me: { _id: myId },
+      } = cache.readQuery({ query: GET_ME });
+      const myProfile = cache.readQuery({
+        query: GET_PROFILE,
+        variables: { userId: myId },
       });
+      if (myProfile) {
+        cache.writeFragment({
+          id: `Post:${post._id}`,
+          fragment: gql`
+            fragment moPost on Post {
+              isSaved
+            }
+          `,
+          data: {
+            isSaved: !post.isSaved,
+          },
+        });
+      } else {
+        cache.writeFragment({
+          id: `Post:${post._id}`,
+          fragment: gql`
+            fragment moPost on Post {
+              isSaved
+              savedPosts
+            }
+          `,
+          data: {
+            isSaved: !post.isSaved,
+            savedPosts: [...myProfile.getProfile.savedPost, post],
+          },
+        });
+      }
     },
   });
 

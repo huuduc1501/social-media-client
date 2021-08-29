@@ -42,7 +42,7 @@ export const CREATE_POST = gql`
     ${CORE_POST_FIELDS}
     mutation createPost($caption:String,$files:[String!],$tags:[String]){
         createPost(caption:$caption,files:$files,tags:$tags){
-            ...BasicUserFields
+            ...CorePostFields
             user{
                 ...BasicUserFields
             }
