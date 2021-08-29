@@ -33,6 +33,7 @@ const Wrapper = styled.div`
   svg {
     width: 24px;
     height: 24px;
+    fill: ${(props) => props.theme.onBg};
   }
 
   @media (max-width: 932px) {

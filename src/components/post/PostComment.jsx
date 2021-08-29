@@ -12,6 +12,12 @@ const Wrapper = styled.div`
   .ant-comment-inner {
     padding: 4px 0;
   }
+  .username {
+    color: ${(props) => props.theme.onSurface};
+  }
+  .comment {
+    color: ${(props) => props.theme.onSecondSurface};
+  }
 `;
 
 const PostComment = ({ comment }) => {
@@ -20,7 +26,10 @@ const PostComment = ({ comment }) => {
     <Wrapper>
       <Comment
         author={
-          <span onClick={() => history.push(`/u/${comment.user._id}`)}>
+          <span
+            className="username"
+            onClick={() => history.push(`/u/${comment.user._id}`)}
+          >
             {comment.user.username}
           </span>
         }
@@ -30,7 +39,7 @@ const PostComment = ({ comment }) => {
             onClick={() => history.push(`/u/${comment.user._id}`)}
           />
         }
-        content={<p>{comment.text}</p>}
+        content={<p className="comment">{comment.text}</p>}
       />
     </Wrapper>
   );

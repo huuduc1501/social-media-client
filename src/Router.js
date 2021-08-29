@@ -19,6 +19,7 @@ const PageWrapper = styled.div`
   width: 100%;
   padding-top: 1rem;
   background-color: ${(props) => props.theme.bg};
+  color: ${(props) => props.theme.onBg};
   min-height: calc(100vh - 60px);
 `;
 

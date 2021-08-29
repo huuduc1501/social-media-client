@@ -10,6 +10,10 @@ import SuggestUser from "../components/SuggestUser";
 import NewPost from "../components/post/NewPost";
 
 const Wrapper = styled.div`
+  h3 {
+    color: ${(props) => props.theme.onBg} ;
+  }
+
   > div {
     width: 100%;
   }

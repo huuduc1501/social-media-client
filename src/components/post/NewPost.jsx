@@ -13,9 +13,11 @@ import { uploadImage } from "../../utils";
 
 const Wrapper = styled.div`
   padding: 0.5rem 1rem;
+  background-color: ${(props) => props.theme.surface};
   border: 1px solid ${(props) => props.theme.borderColor};
   border-radius: ${(props) => props.theme.borderRadius};
-  background-color: white;
+  color: ${(props) => props.theme.onSurface};
+
   > * {
     padding: 0.3rem 0;
   }
@@ -37,6 +39,17 @@ const Wrapper = styled.div`
   svg {
     width: 22px;
     height: 22px;
+    fill: ${(props) => props.theme.onSurface};
+  }
+
+  textarea {
+    background: ${(props) => props.theme.bg};
+    color: ${(props) => props.theme.onBg};
+    border: 0;
+  }
+  textarea:focus {
+    border-color: unset;
+    box-shadow: unset;
   }
 `;
 const UploadWrapper = styled.div``;
@@ -170,11 +183,7 @@ const NewPost = () => {
             )}
           </div>
           <div>
-            <Button
-              loading={loadingCreatePost}
-              type="primary"
-              onClick={onHandleCreatePost}
-            >
+            <Button loading={loadingCreatePost} onClick={onHandleCreatePost}>
               Đăng
             </Button>
           </div>

@@ -26,13 +26,13 @@ import PostComment from "./PostComment";
 import { useHistory } from "react-router-dom";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import { CORE_POST_FIELDS } from "../../queries/fragments";
-import { GET_ME, GET_PROFILE } from "../../queries/user";
+import { GET_ME } from "../../queries/user";
 
 const Wrapper = styled.div`
   width: 100%;
-  background-color: white;
   max-width: 100%;
+  background-color: ${(props) => props.theme.surface};
+  color: ${(props) => props.theme.onSurface};
   border: 1px solid ${(props) => props.theme.borderColor};
   border-radius: ${(props) => props.theme.borderRadius};
   display: grid;
@@ -114,6 +114,7 @@ const Wrapper = styled.div`
   svg {
     width: 22px;
     height: 22px;
+    fill: ${(props) => props.theme.onSurface};
   }
 
   .post-body img {
@@ -177,7 +178,7 @@ const Wrapper = styled.div`
             }
 
             .post-react {
-              padding: 0 1rem;
+              padding: 0.3rem 1rem;
               order: 3;
             }
             .post-action {
@@ -249,41 +250,36 @@ const Post = ({ post, isSpecific }) => {
     },
   });
   const [toggleSaveMutation] = useMutation(TOGGLE_SAVE_POST, {
-    update: (cache, { data: { toggleSave } }) => {
+    update: (cache) => {
       const {
         me: { _id: myId },
       } = cache.readQuery({ query: GET_ME });
-      const myProfile = cache.readQuery({
-        query: GET_PROFILE,
-        variables: { userId: myId },
+
+      cache.modify({
+        id: `User:${myId}`,
+        fields: {
+          savedPosts(existingSavedPostsRefs, { readField }) {
+            if (post.isSaved) {
+              return existingSavedPostsRefs.filter((postRef) => {
+                return readField("_id", postRef) !== post._id;
+              });
+            }
+            return [...existingSavedPostsRefs, post];
+          },
+        },
       });
-      if (myProfile) {
-        cache.writeFragment({
-          id: `Post:${post._id}`,
-          fragment: gql`
-            fragment moPost on Post {
-              isSaved
-            }
-          `,
-          data: {
-            isSaved: !post.isSaved,
-          },
-        });
-      } else {
-        cache.writeFragment({
-          id: `Post:${post._id}`,
-          fragment: gql`
-            fragment moPost on Post {
-              isSaved
-              savedPosts
-            }
-          `,
-          data: {
-            isSaved: !post.isSaved,
-            savedPosts: [...myProfile.getProfile.savedPost, post],
-          },
-        });
-      }
+
+      cache.writeFragment({
+        id: `Post:${post._id}`,
+        fragment: gql`
+          fragment moPost on Post {
+            isSaved
+          }
+        `,
+        data: {
+          isSaved: !post.isSaved,
+        },
+      });
     },
   });
 
@@ -372,8 +368,13 @@ const Post = ({ post, isSpecific }) => {
         {post.isMine ? (
           <span onClick={handleDeletePost}>Xóa bài</span>
         ) : (
-          <ToggleFollow isFollowing={post.isFollowing} userId={post._id}>
-            <span>{post.user.isFollowing ? "Bỏ theo dõi" : "Theo dõi"}</span>
+          <ToggleFollow
+            isFollowing={post.user.isFollowing}
+            userId={post.user._id}
+          >
+            <span onClick={() => setIsModalVisible(false)}>
+              {post.user.isFollowing ? "Bỏ theo dõi" : "Theo dõi"}
+            </span>
           </ToggleFollow>
         )}
       </div>

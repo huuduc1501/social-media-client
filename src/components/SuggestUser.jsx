@@ -1,13 +1,13 @@
 import React from "react";
 import styled from "styled-components";
-import { Avatar, Button } from "antd";
+import { Avatar } from "antd";
 import ToggleFollow from "./ToggleFollow";
 import { useHistory } from "react-router-dom";
 
 const Wrapper = styled.div`
   border: 1px solid ${(props) => props.theme.borderColor};
   border-radius: ${(props) => props.theme.borderRadius};
-  background-color: white;
+  background-color: ${(props) => props.theme.surface};
   padding: 0.5rem 1rem;
   display: flex;
   gap: 0.5rem;
@@ -24,6 +24,19 @@ const Wrapper = styled.div`
   .suggest-name > *:first-child {
     font-weight: 600;
     cursor: pointer;
+  }
+
+  button {
+    background-color: transparent;
+    border: 1px solid ${(props) => props.theme.onSecondSurface};
+    border-radius: ${(props) => props.theme.borderRadius};
+    padding: 0.2rem 0.8rem;
+    outline: none;
+    cursor: pointer;
+    transition: border-color 0.3s ;
+  }
+  button:hover {
+    border-color: ${(props) => props.theme.onSurface};
   }
 `;
 
@@ -43,9 +56,7 @@ const SuggestUser = ({ user }) => {
       </div>
       {!user.isMe && (
         <ToggleFollow isFollowing={user.isFollowing} userId={user._id}>
-          <Button type="primary">
-            {user.isFollowing ? "unfollow" : "follow"}
-          </Button>
+          <button>{user.isFollowing ? "unfollow" : "follow"}</button>
         </ToggleFollow>
       )}
     </Wrapper>

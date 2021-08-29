@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { Avatar, Input, Space, Menu, Dropdown } from "antd";
+import { Avatar, Space, Dropdown } from "antd";
 import CreatePostModal from "../post/CreatePostModal";
 import { useApolloClient } from "@apollo/client";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 import { GET_ME } from "../../queries/user";
 import logo from "../../assets/images/SM-logo.jpeg";
@@ -27,13 +27,18 @@ const Wrapper = styled.div`
   width: 100%;
   height: 60px;
   border-bottom: 1px solid ${(props) => props.theme.borderColor};
-  background: white;
+  background-color: ${(props) => props.theme.primaryColor};
+  color: ${(props) => props.theme.onPrimary};
   z-index: 9;
   .navbar {
     height: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
+  }
+
+  .navbar-item .active svg {
+    fill: ${(props) => props.theme.onPrimary};
   }
   .navbar ul {
     list-style-type: none;
@@ -49,6 +54,7 @@ const Wrapper = styled.div`
     width: 24px;
     height: 24px;
     cursor: pointer;
+    fill: ${(props) => props.theme.onSecondPrimary};
   }
   .ant-avatar {
     cursor: pointer;
@@ -59,13 +65,32 @@ const Wrapper = styled.div`
 `;
 
 const DropdownWrapper = styled.div`
-  .ant-menu-item {
+  padding: 0.5rem 1rem;
+  background-color: ${(props) => props.theme.primaryColor};
+  color: ${(props) => props.theme.onPrimary};
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  .dropdown-item {
+    padding: 0.3rem 0.6rem;
+    cursor: pointer;
     display: flex;
+    gap: 1rem;
+    /* justify-content: space-between; */
     align-items: center;
   }
+
+  .dropdown-item:hover {
+    background-color: ${(props) => props.theme.bg};
+  }
+
   svg {
     width: 16px;
     height: 16px;
+    fill: ${(props) => props.theme.onPrimary};
+  }
+  a {
+    color: ${(props) => props.theme.onPrimary} ;
   }
 `;
 
@@ -84,15 +109,17 @@ const Navbar = () => {
 
   const userDropdown = (
     <DropdownWrapper>
-      <Menu>
-        <Menu.Item icon={<UserOutlined />}>
-          <Link to={`/u/${me._id}`}>Trang cá nhân</Link>
-        </Menu.Item>
-        <Menu.Item icon={<BookmarkOulined />}>Đã lưu</Menu.Item>
-        <Menu.Item icon={<LogoutOutLined />} onClick={handleLogout}>
-          Đăng xuất
-        </Menu.Item>
-      </Menu>
+      <div className="dropdown-item">
+        <UserOutlined />
+        <NavLink to={`/u/${me._id}`}>Trang cá nhân</NavLink>
+      </div>
+      <div className="dropdown-item">
+        <BookmarkOulined />
+        Đã lưu
+      </div>
+      <div className="dropdown-item" onClick={handleLogout}>
+        <LogoutOutLined /> Đăng xuất
+      </div>
     </DropdownWrapper>
   );
 
@@ -107,9 +134,9 @@ const Navbar = () => {
       <div className="navbar container">
         <div className="logo">
           <div className="navbar-item">
-            <Link to="/">
+            <NavLink to="/">
               <img src={logo} alt="Logo" />
-            </Link>
+            </NavLink>
           </div>
         </div>
         <div className="search">
@@ -120,19 +147,19 @@ const Navbar = () => {
         <div className="right">
           <Space size="middle">
             <div className="navbar-item">
-              <Link to="/">
+              <NavLink exact={true} to="/" activeClassName="active">
                 <HomeOutlined />
-              </Link>
+              </NavLink>
             </div>
             <div className="navbar-item">
-              <Link to="/chat">
+              <NavLink to="/chat" activeClassName="active">
                 <CommentOutlined />
-              </Link>
+              </NavLink>
             </div>
             <div className="navbar-item">
-              <Link to="/explore">
+              <NavLink to="/explore" activeClassName="active">
                 <ExploreOutlined />
-              </Link>
+              </NavLink>
             </div>
             <div className="navbar-item" onClick={() => setVisible(true)}>
               <HeartOutlined />

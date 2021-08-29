@@ -10,6 +10,8 @@ const Wrapper = styled.div`
     margin: 40px auto;
     padding: 1rem;
     border: 1px solid ${props => props.theme.borderColor};
+    background-color: ${props => props.theme.white};
+    border-radius: ${props => props.theme.borderRadius};
 
     .form-button > div{ 
         max-width: 100%;

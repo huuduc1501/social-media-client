@@ -15,6 +15,8 @@ const Wrapper = styled.div`
   border-top: 1px solid ${(props) => props.theme.borderColor};
   textarea {
     flex-grow: 2;
+    background-color: ${(props) => props.theme.bg};
+    color: ${(props) => props.theme.onSurface};
   }
   .emoji-picker {
     position: relative;
@@ -87,12 +89,12 @@ const AddComment = ({ post, isSpecific }) => {
         )}
       </div>
       <TextArea
-        autoSize={!isSpecific}
+        autoSize={{ minRows: 1, maxRows: 4 }}
         bordered={false}
         value={textAreaValue}
         name="text"
         onChange={(e) => setTextAreaValue(e.target.value)}
-        placeholder='Thêm bình luận'
+        placeholder="Thêm bình luận"
       />
       <Send className="emoji-send" onClick={handleAddComment} />
     </Wrapper>

@@ -16,23 +16,59 @@ const layout = {
 
 const Wrapper = styled.div`
   width: 70%;
-  background-color: white;
   padding: 2rem;
   margin: 4rem auto;
   border-radius: 4px;
   border: 1px solid ${(props) => props.theme.borderColor};
+  background-color: ${(props) => props.theme.surface};
+  color: ${(props) => props.theme.onSurface};
 
   img {
     width: 70px;
     height: 70px;
-    object-fit: cover;
-    border-radius: 50%;
+    /* object-fit: cover; */
+    /* border-radius: 50%; */
     border: 0;
+  }
+
+  .avatar-label {
+    display: flex;
+    flex-direction: column;
+    color: ${(props) => props.theme.onSurface};
+  }
+
+  .avatar-label > label {
+    cursor: pointer;
+    color: #0f0fdf;
   }
 
   .edit-profile {
     width: 60%;
     margin: auto;
+  }
+  @media (max-width: 500px) {
+    width: 100%;
+    .edit-profile {
+      width: 90%;
+    }
+  }
+
+  input,
+  textarea {
+    background: ${(props) => props.theme.bg};
+    color: ${(props) => props.theme.onSurface};
+    border: 0;
+  }
+
+  label {
+    color: ${(props) => props.theme.onSurface};
+  }
+
+  .ant-image-mask-info {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
   }
 `;
 
@@ -86,22 +122,24 @@ const EditProfile = () => {
             bio: me.bio,
           }}
         >
-          <Row>
+          <Row gutter={16}>
             <Col span="8">
               <Image src={avatarFile.url} />
             </Col>
             <Col span="16">
-              <span>{me.username}</span>
-              <label htmlFor="change-avatar-link">
-                <span>thay đỗi ảnh đại diện</span>
-              </label>
-              <input
-                id="change-avatar-link"
-                accept="image/*"
-                type="file"
-                onChange={handleImageUpload}
-                hidden
-              />
+              <div className="avatar-label">
+                <span>{me.username}</span>
+                <label htmlFor="change-avatar-link">
+                  <span>thay đỗi ảnh đại diện</span>
+                </label>
+                <input
+                  id="change-avatar-link"
+                  accept="image/*"
+                  type="file"
+                  onChange={handleImageUpload}
+                  hidden
+                />
+              </div>
             </Col>
           </Row>
           <Form.Item
@@ -134,7 +172,7 @@ const EditProfile = () => {
             <Input.TextArea />
           </Form.Item>
           <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
-            <Button type='primary' loading={isUpdating} htmlType="submit">
+            <Button type="primary" loading={isUpdating} htmlType="submit">
               Cập nhật
             </Button>
           </Form.Item>

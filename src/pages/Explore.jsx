@@ -13,15 +13,24 @@ const Wrapper = styled.div`
     grid-template-columns: repeat(3, 1fr);
     justify-items: center;
   }
+  .explore__post-list :last-child {
+    grid-column: 1/4;
+  }
 
   @media (max-width: 932px) {
     .explore__post-list {
       grid-template-columns: repeat(2, 1fr);
     }
+    .explore__post-list :last-child {
+      grid-column: 1/3;
+    }
   }
   @media (max-width: 616px) {
     .explore__post-list {
       grid-template-columns: 1fr;
+    }
+    .explore__post-list :last-child {
+      grid-column: 1/2;
     }
   }
 `;
@@ -37,7 +46,7 @@ const Explore = () => {
   const onHandleFetchMore = async () => {
     await fetchMore({
       variables: {
-        limit: 5,
+        limit: 6,
         cursor: data.suggestPosts.paging.nextCursor,
       },
     });
@@ -50,7 +59,7 @@ const Explore = () => {
       <Divider orientation="left">
         <h3>Khám phá</h3>
       </Divider>
-      <div className="">
+      <div className="explore-content">
         {loading ? (
           <div className="explore__post-list">
             {[...Array(9).fill(1)].map((_, index) => (
@@ -68,7 +77,7 @@ const Explore = () => {
             next={onHandleFetchMore}
             className="explore__post-list"
             endMessage={
-              <p style={{ textAlign: "center", gridColumn: "1/4" }}>
+              <p>
                 <b>Yay! Bạn đã khám phá tất cả các bài đăng</b>
               </p>
             }

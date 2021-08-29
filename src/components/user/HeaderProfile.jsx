@@ -78,7 +78,7 @@ const Wrapper = styled.div`
     }
     .profile-stats {
       border-top: 1px solid ${(props) => props.theme.borderColor};
-      padding-top:.5rem;
+      padding-top: 0.5rem;
       grid-column: 1/3;
       display: flex;
       justify-content: space-around;
@@ -87,7 +87,7 @@ const Wrapper = styled.div`
       display: flex;
       flex-direction: column;
       align-items: center;
-      line-height:1.2rem;
+      line-height: 1.2rem;
     }
   }
 `;
@@ -166,6 +166,7 @@ const HeaderProfile = ({ user }) => {
         </div>
         <div className="profile-bio">
           <span>{user.fullname}</span>
+          <p>{user.bio}</p>
         </div>
         <div className="profile-stats">
           <div>

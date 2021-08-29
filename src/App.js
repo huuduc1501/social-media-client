@@ -7,7 +7,7 @@ import Router from './Router'
 import { useQuery } from '@apollo/client';
 import { IS_LOGGED_IN } from './queries/client';
 import GLobleStyle from './styles/GLobleStyle';
-import { lightTheme } from './styles/theme'
+import { lightTheme, darkTheme } from './styles/theme'
 
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
