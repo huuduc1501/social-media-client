@@ -33,10 +33,11 @@ const Wrapper = styled.div`
     padding: 0.2rem 0.8rem;
     outline: none;
     cursor: pointer;
-    transition: border-color 0.3s ;
+    transition: border-color 0.3s, background-color 0.3s;
   }
   button:hover {
     border-color: ${(props) => props.theme.onSurface};
+    background-color: ${(props) => props.theme.bg};
   }
 `;
 

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Avatar, Space, Dropdown } from "antd";
 import CreatePostModal from "../post/CreatePostModal";
 import { useApolloClient } from "@apollo/client";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 
 import { GET_ME } from "../../queries/user";
 import logo from "../../assets/images/SM-logo.jpeg";
@@ -19,7 +19,7 @@ import {
   MoonOutlined,
 } from "../Icon";
 import { IS_LOGGED_IN, MODE } from "../../queries/client";
-import SearchField from "../SearchField";
+import SearchField from "./SearchField";
 
 const Wrapper = styled.div`
   position: sticky;
@@ -113,21 +113,21 @@ const Navbar = () => {
   const handleChangeThemeMode = () => {
     client.writeQuery({
       query: MODE,
-      data: { mode: mode === "dark" ? "light" : 'dark' },
+      data: { mode: mode === "dark" ? "light" : "dark" },
     });
-    localStorage.setItem("mode", mode);
+    localStorage.setItem("mode", mode === "dark" ? "light" : "dark");
   };
 
   const userDropdown = (
     <DropdownWrapper>
-      <div className="dropdown-item">
+      <Link className="dropdown-item" to={`/u/${me._id}`}>
         <UserOutlined />
-        <NavLink to={`/u/${me._id}`}>Trang cá nhân</NavLink>
-      </div>
-      <div className="dropdown-item">
+        Trang cá nhân
+      </Link>
+      <Link className="dropdown-item" to={`/u/${me._id}/saved`}>
         <BookmarkOulined />
         Đã lưu
-      </div>
+      </Link>
       <div className="dropdown-item" onClick={handleLogout}>
         <LogoutOutLined /> Đăng xuất
       </div>

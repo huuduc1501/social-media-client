@@ -2,11 +2,12 @@ import { useQuery } from "@apollo/client";
 import React, { useState } from "react";
 import styled from "styled-components";
 import { Divider, Skeleton } from "antd";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { BookmarkOulined, PostIcon } from "../components/Icon";
 import { GET_PROFILE } from "../queries/user";
 import HeaderProfile from "../components/user/HeaderProfile";
 import PostPreview from "../components/post/PostPreview";
+import NotFound from "../components/NotFound";
 
 const Wrapper = styled.div`
   .profile-tab {
@@ -19,9 +20,10 @@ const Wrapper = styled.div`
   }
   .profile-tab > div {
     cursor: pointer;
+    opacity: 0.8;
   }
   .profile-tab .choose {
-    font-weight: 500;
+    opacity: 1;
   }
   .profile__post-list {
     margin-top: 1rem;
@@ -49,9 +51,9 @@ const Wrapper = styled.div`
 `;
 
 const Profile = () => {
-  const [tab, setTab] = useState("post");
   const { userId } = useParams();
-  console.log(tab);
+  const { pathname } = useLocation();
+  const [tab, setTab] = useState(pathname.split("/").pop() || "post");
   const { loading, error, data } = useQuery(GET_PROFILE, {
     variables: {
       userId,
@@ -68,9 +70,14 @@ const Profile = () => {
       </div>
     );
 
-  if (error) return "error";
+  if (error) {
+    console.error(error);
+    return <NotFound />;
+  }
 
-  console.log(user.savedPosts.length === 0);
+  if (!data.getProfile.isMe && tab !== "post") {
+    setTab("post");
+  }
 
   return (
     <Wrapper>
@@ -87,12 +94,14 @@ const Profile = () => {
           >
             <PostIcon /> Post
           </div>
-          <div
-            className={tab === "saved" ? "choose" : ""}
-            onClick={() => setTab("saved")}
-          >
-            <BookmarkOulined /> Saved
-          </div>
+          {data.getProfile.isMe && (
+            <div
+              className={tab === "saved" ? "choose" : ""}
+              onClick={() => setTab("saved")}
+            >
+              <BookmarkOulined /> Saved
+            </div>
+          )}
         </div>
         <div className="profile__post-list">
           {tab === "post" &&
@@ -100,7 +109,7 @@ const Profile = () => {
               <PlaceHolder
                 icon={<PostIcon />}
                 title="Bài đăng"
-                text="Bài đăng của bạn sẽ hiển thị tại đây"
+                text="Bài đăng sẽ hiển thị tại đây"
               />
             ) : (
               user.posts.map((post, index) => (
@@ -108,11 +117,12 @@ const Profile = () => {
               ))
             ))}
           {tab === "saved" &&
+            data.getProfile.isMe &&
             (user.savedPosts.length === 0 ? (
               <PlaceHolder
                 icon={<BookmarkOulined />}
                 title="Bài đã lưu"
-                text="Bài đã lưu của bạn của bạn sẽ hiển thị tại đây"
+                text="Bài đã lưu sẽ hiển thị tại đây"
               />
             ) : (
               user.savedPosts?.map((post, index) => (

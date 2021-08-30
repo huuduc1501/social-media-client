@@ -68,6 +68,11 @@ const Wrapper = styled.div`
   }
 
   @media (max-width: 600px) {
+    column-gap: .6rem;
+    img {
+      width: 100px;
+      height: 100px;
+    }
     .profile-avatar {
       grid-row: 1/3;
     }
@@ -130,13 +135,13 @@ const HeaderProfile = ({ user }) => {
   return (
     <>
       <FollowModal
-        title="theo dõi"
+        title="Đang theo dõi"
         data={followingsData?.getProfile.followings}
         visible={isFollowingModalVisible}
         onCancel={() => setIsFollowingModalVisible(false)}
       />{" "}
       <FollowModal
-        title="theo dõi"
+        title="Theo dõi"
         data={followersData?.getProfile.followers}
         visible={isFollowerModalVisible}
         onCancel={() => setIsFollowerModalVisible(false)}

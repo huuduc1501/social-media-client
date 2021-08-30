@@ -51,6 +51,9 @@ const RootRouter = () => {
             <Route path="/u/:userId">
               <Profile />
             </Route>
+            <Route path="/u/:userId/saved">
+              <Profile />
+            </Route>
             <Route path={`/p/:postId`}>
               <SpecificPost />
             </Route>

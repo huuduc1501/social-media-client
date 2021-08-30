@@ -21,7 +21,7 @@ export const darkTheme = {
     white: '#FFF',
     borderColor: "#3b424a",
     borderRadius: "4px",
-    onBg: '#FFF',
+    onBg: '#e5eaf0',
     onSurface: '#e5eaf0',
     onSecondSurface: '#8d99a7',
     onPrimary: '#e5eaf0',

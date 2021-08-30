@@ -11,7 +11,7 @@ import NewPost from "../components/post/NewPost";
 
 const Wrapper = styled.div`
   h3 {
-    color: ${(props) => props.theme.onBg} ;
+    color: ${(props) => props.theme.onBg};
   }
 
   > div {
@@ -27,9 +27,15 @@ const Wrapper = styled.div`
   .suggest-list > div {
     margin-bottom: 0.5rem;
   }
+
   @media (max-width: 1016px) {
     .suggest-list {
       width: 33.33%;
+    }
+  }
+  @media (max-width: 600px) {
+    .ant-row {
+      margin: 0 !important;
     }
   }
 `;
@@ -71,11 +77,9 @@ const Home = () => {
             {loading ? (
               <>
                 {[
-                  ...Array(2)
-                    .fill(1)
-                    .map((_, index) => (
-                      <Skeleton key={index} active avatar paragraph={4} />
-                    )),
+                  ...Array(2).map((_, index) => (
+                    <Skeleton key={index} active avatar paragraph={4} />
+                  )),
                 ]}
               </>
             ) : (
@@ -117,9 +121,9 @@ const Home = () => {
             {sgLoading ? (
               <>
                 {[
-                  ...Array(4)
-                    .fill(1)
-                    .map((_, index) => <Skeleton key={index} active avatar />),
+                  ...Array(4).map((_, index) => (
+                    <Skeleton key={index} active avatar />
+                  )),
                 ]}
               </>
             ) : (

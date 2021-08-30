@@ -1,6 +1,6 @@
 import { gql, useMutation } from "@apollo/client";
 import React from "react";
-import { FOLLOW_USER, UNFOLLOW_USER } from "../queries/user";
+import { FOLLOW_USER, GET_ME, UNFOLLOW_USER } from "../queries/user";
 
 const ToggleFollow = ({ userId, isFollowing, children, ...rest }) => {
   const [followMutation] = useMutation(FOLLOW_USER, {
@@ -14,6 +14,17 @@ const ToggleFollow = ({ userId, isFollowing, children, ...rest }) => {
         `,
         data: {
           isFollowing: true,
+        },
+      });
+      const {
+        me: { _id: myId },
+      } = cache.readQuery({ query: GET_ME });
+      cache.modify({
+        id: `User:${myId}`,
+        fields: {
+          followingsCount(currentFollowingsCount) {
+            return currentFollowingsCount + 1;
+          },
         },
       });
     },
@@ -30,6 +41,19 @@ const ToggleFollow = ({ userId, isFollowing, children, ...rest }) => {
         data: {
           isFollowing: false,
         },
+      });
+
+      const {
+        me: { _id: myId },
+      } = cache.readQuery({ query: GET_ME });
+      cache.modify({
+        id: `User:${myId}`,
+        fields: {
+          followingsCount(currentFollowingsCount) {
+            return currentFollowingsCount - 1;
+          },
+        },
+        broadcast: true,
       });
     },
   });

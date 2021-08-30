@@ -7,7 +7,7 @@ import { SEARCH_POSTS } from "../queries/post";
 import { SEARCH_USER } from "../queries/user";
 
 import Post from "../components/post/Post";
-import { Col, Divider, Row } from "antd";
+import { Col, Divider, Row, Skeleton } from "antd";
 import SuggestUser from "../components/SuggestUser";
 
 const Wrapper = styled.div`
@@ -19,33 +19,56 @@ const Wrapper = styled.div`
 const SearchPage = () => {
   const { search } = useLocation();
   const searchTerm = queryString.parse(search).searchTerm;
-  const { loading, data: postData } = useQuery(SEARCH_POSTS, {
+  const { loading: postLoading, data: postData } = useQuery(SEARCH_POSTS, {
     variables: { searchTerm },
     fetchPolicy: "cache-first",
   });
-  const { loading: loadingUser, data: userData } = useQuery(SEARCH_USER, {
+  const { loading: userLoading, data: userData } = useQuery(SEARCH_USER, {
     variables: { searchTerm },
     fetchPolicy: "cache-first",
   });
-  if (loading || loadingUser) return "...loading";
   return (
     <Wrapper>
       <Row gutter={24}>
-        <Col span={16}>
+        <Col sm={14} xs={24}>
           <Divider>bài đăng</Divider>
           <div className="search-list">
-            {postData.searchPosts.map((post, index) => (
-              <Post key={index} post={post} />
-            ))}
+            {postLoading ? (
+              <>
+                {[
+                  ...Array(3).map((_, index) => (
+                    <Skeleton key={index} active avatar paragraph={4} />
+                  )),
+                ]}
+              </>
+            ) : (
+              <>
+                {postData.searchPosts.map((post, index) => (
+                  <Post key={index} post={post} />
+                ))}
+              </>
+            )}
           </div>
         </Col>
-        <Col span={8}>
+        <Col sm={10} xs={24}>
           <Divider>người dùng</Divider>
 
           <div className="search-list">
-            {userData.searchUsers.map((user, index) => (
-              <SuggestUser user={user} key={index} />
-            ))}
+            {userLoading ? (
+              <>
+                {[
+                  ...Array(4).map((_, index) => (
+                    <Skeleton key={index} active avatar paragraph={1} />
+                  )),
+                ]}
+              </>
+            ) : (
+              <>
+                {userData.searchUsers.map((user, index) => (
+                  <SuggestUser user={user} key={index} />
+                ))}
+              </>
+            )}
           </div>
         </Col>
       </Row>
