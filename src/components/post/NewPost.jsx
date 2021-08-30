@@ -51,6 +51,13 @@ const Wrapper = styled.div`
     border-color: unset;
     box-shadow: unset;
   }
+  .ant-upload.ant-upload-select-picture-card {
+    background-color: ${(props) => props.theme.bg};
+    color: ${(props) => props.theme.onBg};
+  }
+  .ant-upload.ant-upload-select-picture-card .text {
+    color: ${(props) => props.theme.onBg};
+  }
 `;
 const UploadWrapper = styled.div``;
 
@@ -212,7 +219,7 @@ const NewPost = () => {
           >
             <UploadWrapper>
               <PlusOutlined />
-              <div>chọn ảnh</div>
+              <div className="text">chọn ảnh</div>
             </UploadWrapper>
           </Upload>
         )}

@@ -218,7 +218,7 @@ const MoreMenuWrapper = styled.div`
 const settings = {
   dots: true,
   dynamicHeight: true,
-  infiniteLoop: true,
+  // infiniteLoop: true,
   speed: 500,
   slidesToShow: 1,
   slidesToScroll: 1,

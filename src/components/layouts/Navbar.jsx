@@ -15,8 +15,10 @@ import {
   UserOutlined,
   BookmarkOulined,
   LogoutOutLined,
+  SunOutlined,
+  MoonOutlined,
 } from "../Icon";
-import { IS_LOGGED_IN } from "../../queries/client";
+import { IS_LOGGED_IN, MODE } from "../../queries/client";
 import SearchField from "../SearchField";
 
 const Wrapper = styled.div`
@@ -90,7 +92,7 @@ const DropdownWrapper = styled.div`
     fill: ${(props) => props.theme.onPrimary};
   }
   a {
-    color: ${(props) => props.theme.onPrimary} ;
+    color: ${(props) => props.theme.onPrimary};
   }
 `;
 
@@ -98,6 +100,7 @@ const Navbar = () => {
   const [visible, setVisible] = useState(false);
   const client = useApolloClient();
   const { me } = client.readQuery({ query: GET_ME });
+  const { mode } = client.readQuery({ query: MODE });
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -105,6 +108,14 @@ const Navbar = () => {
       query: IS_LOGGED_IN,
       data: { isLoggedIn: false },
     });
+  };
+
+  const handleChangeThemeMode = () => {
+    client.writeQuery({
+      query: MODE,
+      data: { mode: mode === "dark" ? "light" : 'dark' },
+    });
+    localStorage.setItem("mode", mode);
   };
 
   const userDropdown = (
@@ -163,6 +174,9 @@ const Navbar = () => {
             </div>
             <div className="navbar-item" onClick={() => setVisible(true)}>
               <HeartOutlined />
+            </div>
+            <div className="navbar-item" onClick={handleChangeThemeMode}>
+              {mode === "dark" ? <SunOutlined /> : <MoonOutlined />}
             </div>
             <div className="navbar-item">
               <Dropdown overlay={userDropdown} arrow trigger={["click"]}>

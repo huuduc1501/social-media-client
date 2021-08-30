@@ -2,7 +2,7 @@ import { InMemoryCache, ApolloClient, createHttpLink, from } from "@apollo/clien
 import { onError } from "@apollo/client/link/error";
 import { setContext } from '@apollo/client/link/context';
 
-import { IS_LOGGED_IN } from "./queries/client";
+import { IS_LOGGED_IN, MODE } from "./queries/client";
 
 function merge(existing = {}, incoming) {
     if (Object.entries(existing).length === 0)
@@ -77,6 +77,13 @@ cache.writeQuery({
     query: IS_LOGGED_IN,
     data: {
         isLoggedIn: !!localStorage.getItem('token')
+    }
+})
+
+cache.writeQuery({
+    query: MODE,
+    data: {
+        mode: localStorage.getItem('mode') || 'light'
     }
 })
 

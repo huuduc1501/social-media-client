@@ -5,3 +5,8 @@ export const IS_LOGGED_IN = gql`
         isLoggedIn @client
     }
 `
+export const MODE = gql`
+    query getMode {
+        mode @client
+    } 
+`

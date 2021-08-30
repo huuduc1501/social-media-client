@@ -89,19 +89,19 @@ const Home = () => {
                     <b>Yay! Bạn đã xem tất cả các bài đăng</b>
                   </p>
                 }
-                refreshFunction={async () => await refetch()}
-                pullDownToRefresh
-                pullDownToRefreshThreshold={50}
-                pullDownToRefreshContent={
-                  <h3 style={{ textAlign: "center" }}>
-                    &#8595; Pull down to refresh
-                  </h3>
-                }
-                releaseToRefreshContent={
-                  <h3 style={{ textAlign: "center" }}>
-                    &#8593; Release to refresh
-                  </h3>
-                }
+                // refreshFunction={async () => await refetch()}
+                // pullDownToRefresh
+                // pullDownToRefreshThreshold={50}
+                // pullDownToRefreshContent={
+                //   <h3 style={{ textAlign: "center" }}>
+                //     &#8595; Pull down to refresh
+                //   </h3>
+                // }
+                // releaseToRefreshContent={
+                //   <h3 style={{ textAlign: "center" }}>
+                //     &#8593; Release to refresh
+                //   </h3>
+                // }
               >
                 {data?.feed.posts.map((post, index) => {
                   return <Post key={index} post={post} />;

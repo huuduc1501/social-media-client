@@ -5,7 +5,7 @@ import { ThemeProvider } from 'styled-components';
 
 import Router from './Router'
 import { useQuery } from '@apollo/client';
-import { IS_LOGGED_IN } from './queries/client';
+import { IS_LOGGED_IN, MODE } from './queries/client';
 import GLobleStyle from './styles/GLobleStyle';
 import { lightTheme, darkTheme } from './styles/theme'
 
@@ -16,9 +16,11 @@ import "slick-carousel/slick/slick-theme.css";
 const App = () => {
     const { data: { isLoggedIn } } = useQuery(IS_LOGGED_IN)
 
+    const { data: { mode } } = useQuery(MODE)
+
     return (
         <>
-            <ThemeProvider theme={lightTheme}>
+            <ThemeProvider theme={mode === 'dark' ? darkTheme : lightTheme}>
                 <GLobleStyle />
                 {isLoggedIn ? <Router /> : <Auth />}
             </ThemeProvider>
