@@ -35,10 +35,4 @@ export default createGlobalStyle`
         color: ${(props) => props.theme.onBg};
     }
 
-    @media (max-width: 425px) {
-    .emoji-mart {
-      width: 280px !important;
-    }
-  }
-
 `;

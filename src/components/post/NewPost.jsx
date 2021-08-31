@@ -3,13 +3,13 @@ import { Avatar, Modal, Upload, Button, message } from "antd";
 import TextArea from "antd/lib/input/TextArea";
 import { useApolloClient, useMutation } from "@apollo/client";
 import styled from "styled-components";
-import { GET_ME, GET_NEW_FEED } from "../../queries/user";
+import { GET_ME } from "../../queries/user";
 import { useHistory } from "react-router-dom";
-import { Picker } from "emoji-mart";
-import { ImageOutlined, SmileOutlined, PlusOutlined } from "../Icon";
+import { ImageOutlined, PlusOutlined } from "../Icon";
 
 import { CREATE_POST } from "../../queries/post";
 import { uploadImage } from "../../utils";
+import EmojiPicker from "../EmojiPicker";
 
 const Wrapper = styled.div`
   padding: 0.5rem 1rem;
@@ -32,9 +32,6 @@ const Wrapper = styled.div`
     align-items: center;
   }
   .new__post-footer {
-  }
-  .emoji-picker {
-    position: relative;
   }
   svg {
     width: 22px;
@@ -69,7 +66,6 @@ const NewPost = () => {
   const [previewVisible, setPreviewVisible] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [textAreaValue, setTextAreaValue] = useState("");
-  const [isOpenEmoji, setIsOpenEmoji] = useState(false);
   const [openUploadBox, setOpenUploadBox] = useState(false);
   const [loadingCreatePost, setLoadingCreatePost] = useState(false);
   const [createPostMutattion] = useMutation(CREATE_POST, {
@@ -115,9 +111,7 @@ const NewPost = () => {
     setPreviewVisible(true);
   };
   const onHandleCancel = () => setPreviewVisible(false);
-  const handleAddEmoji = (emoji) => {
-    setTextAreaValue(textAreaValue + emoji.native);
-  };
+
   const onHandleOpenUpload = (e) => {
     setOpenUploadBox(true);
   };
@@ -193,19 +187,10 @@ const NewPost = () => {
             </div>
           )}
           <div className="emoji-picker">
-            <SmileOutlined onClick={() => setIsOpenEmoji(!isOpenEmoji)} />
-            {isOpenEmoji && (
-              <Picker
-                set="apple"
-                style={{
-                  position: "absolute",
-                  top: "2rem",
-                  left: "20px",
-                  zIndex: "99",
-                }}
-                onSelect={handleAddEmoji}
-              />
-            )}
+            <EmojiPicker
+              setValue={setTextAreaValue}
+              pickerStyle={{ right: "0" }}
+            />
           </div>
           <div>
             <Button loading={loadingCreatePost} onClick={onHandleCreatePost}>
