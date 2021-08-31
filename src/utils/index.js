@@ -13,3 +13,19 @@ export const uploadImage = async (file) => {
         return error
     }
 }
+
+export const clickOutsideRef = (contentRef, toggleRef) => {
+
+    document.addEventListener('mousedown', (e) => {
+        // user click toggle
+        if (toggleRef.current && toggleRef.current.contains(e.target)) {
+            contentRef.current.classList.toggle('active')
+
+        } else {
+            // user click outside toggle and content
+            if (contentRef.current && !contentRef.current.contains(e.target)) {
+                contentRef.current.classList.remove('active')
+            }
+        }
+    })
+}

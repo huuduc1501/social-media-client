@@ -22,6 +22,7 @@ const Wrapper = styled.div`
 
 const PostComment = ({ comment }) => {
   const history = useHistory();
+  if (!comment) return null;
   return (
     <Wrapper>
       <Comment

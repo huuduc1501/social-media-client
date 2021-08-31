@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import TextArea from "antd/lib/input/TextArea";
-import { gql, useMutation } from "@apollo/client";
+import { gql, useApolloClient, useMutation } from "@apollo/client";
 import { Picker } from "emoji-mart";
 import "emoji-mart/css/emoji-mart.css";
 
 import { ADD_COMMENT } from "../../queries/comment";
 import { SmileOutlined, Send } from "../Icon";
+import { clickOutsideRef } from "../../utils/index";
+import { MODE } from "../../queries/client";
 
 const Wrapper = styled.div`
   padding: 0 1rem;
@@ -18,22 +20,32 @@ const Wrapper = styled.div`
     background-color: ${(props) => props.theme.bg};
     color: ${(props) => props.theme.onSurface};
   }
-  .emoji-picker {
+  .comment__emoji--picker {
     position: relative;
   }
-  /* .emoji-send {
-    position: absolute;
-    top: 0;
-    right: 1rem;
-  } */
+  .emoji__picker--content {
+    display: none;
+  }
+  .active {
+    display: block;
+  }
+
+  .active {
+    display: block;
+  }
 `;
 
-const AddComment = ({ post, isSpecific }) => {
+const AddComment = ({ post, setCommentList }) => {
   const [textAreaValue, setTextAreaValue] = useState("");
-  const [isOpenEmoji, setIsOpenEmoji] = useState(false);
+  const emojiPickerRef = useRef(null);
+  const toggleEmojiRef = useRef(null);
+  const client = useApolloClient();
+  const { mode } = client.readQuery({ query: MODE });
 
   const [addCommentMutation] = useMutation(ADD_COMMENT, {
     update: (cache, { data: { addComment } }) => {
+      setCommentList((commentList) => [...commentList, addComment]);
+
       cache.writeFragment({
         id: `Post:${post._id}`,
         fragment: gql`
@@ -51,12 +63,16 @@ const AddComment = ({ post, isSpecific }) => {
           }
         `,
         data: {
-          comments: post.comments.concat(addComment),
+          comments: [addComment].concat(post.comments),
           commentsCount: 1 + +post.commentsCount,
         },
       });
     },
   });
+
+  useEffect(() => {
+    clickOutsideRef(emojiPickerRef, toggleEmojiRef);
+  }, []);
 
   const handleAddComment = async (e) => {
     if (!textAreaValue) return;
@@ -78,15 +94,24 @@ const AddComment = ({ post, isSpecific }) => {
   };
   return (
     <Wrapper>
-      <div className="emoji-picker">
-        <SmileOutlined onClick={() => setIsOpenEmoji(!isOpenEmoji)} />
-        {isOpenEmoji && (
+      <div className="comment__emoji--picker">
+        <div ref={toggleEmojiRef}>
+          <SmileOutlined />
+        </div>
+
+        <div ref={emojiPickerRef} className="emoji__picker--content">
           <Picker
             set="apple"
-            style={{ position: "absolute", bottom: "2rem", left: "20px" }}
+            theme={mode}
+            style={{
+              position: "absolute",
+              bottom: "2rem",
+              left: "20px",
+              zIndex: "9",
+            }}
             onSelect={handleAddEmoji}
           />
-        )}
+        </div>
       </div>
       <TextArea
         autoSize={{ minRows: 1, maxRows: 4 }}
@@ -100,5 +125,13 @@ const AddComment = ({ post, isSpecific }) => {
     </Wrapper>
   );
 };
+
+// const PickerWrapper = styled.div`
+//   /* display: none; */
+//   position: absolute;
+//   bottom: 2rem;
+//   left: 20px;
+//   z-index: 9;
+// `;
 
 export default AddComment;

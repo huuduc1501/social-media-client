@@ -74,13 +74,30 @@ const NewPost = () => {
   const [loadingCreatePost, setLoadingCreatePost] = useState(false);
   const [createPostMutattion] = useMutation(CREATE_POST, {
     update: (cache, { data: { createPost } }) => {
-      const {
-        feed: { posts },
-      } = cache.readQuery({ query: GET_NEW_FEED });
-      cache.writeQuery({
-        query: GET_NEW_FEED,
-        data: { feed: { posts: [createPost, ...posts] } },
+      //  cách 1: ghi đè lại feed, và k trigger hàm merge
+
+      cache.modify({
+        id: "ROOT_QUERY",
+        fields: {
+          feed(existing) {
+            return {
+              paging: existing.paging,
+              posts: [{ __ref: `Post:${createPost._id}` }, ...existing.posts],
+            };
+          },
+        },
       });
+
+      // cach 2: nối thêm bài đăng mới vào feed bằng hàm merge
+
+      // const { feed } = cache.readQuery({ query: GET_NEW_FEED });
+      // console.log(feed);
+      // cache.writeQuery({
+      //   query: GET_NEW_FEED,
+      //   data: {
+      //     feed: { paging: feed.paging, posts: [createPost] },
+      //   },
+      // });
     },
   });
   useEffect(() => {
@@ -119,6 +136,7 @@ const NewPost = () => {
   };
 
   const onHandleCreatePost = async () => {
+    console.log("upload");
     let caption;
     let tags = [];
     let files = [];
@@ -206,7 +224,6 @@ const NewPost = () => {
         />
       </div>
       <div className="new__post-footer">
-        {}
         {openUploadBox && (
           <Upload
             fileList={imageList}

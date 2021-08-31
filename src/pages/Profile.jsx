@@ -53,7 +53,9 @@ const Wrapper = styled.div`
 const Profile = () => {
   const { userId } = useParams();
   const { pathname } = useLocation();
-  const [tab, setTab] = useState(pathname.split("/").pop() || "post");
+  const [tab, setTab] = useState(
+    pathname.split("/").pop() === "saved" ? "saved" : "post"
+  );
   const { loading, error, data } = useQuery(GET_PROFILE, {
     variables: {
       userId,

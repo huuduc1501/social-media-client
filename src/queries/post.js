@@ -46,6 +46,13 @@ export const CREATE_POST = gql`
             user{
                 ...BasicUserFields
             }
+            comments {
+                _id 
+                text 
+                user {
+                    ...BasicUserFields
+                }
+            }
         }
     }
 `

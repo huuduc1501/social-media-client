@@ -99,13 +99,19 @@ const Wrapper = styled.div`
   }
 
   .post-react {
+    padding: 0.3rem 0;
     display: flex;
     gap: 1rem;
     font-weight: 400;
   }
 
+  .comment__list--more > span {
+    color: ${(props) => props.theme.onSecondSurface};
+    cursor: pointer;
+  }
+
   .comment-list {
-    max-height: 400px;
+    /* max-height: 400px; */
     overflow-y: auto;
   }
   .comment-list::-webkit-scrollbar {
@@ -178,7 +184,6 @@ const Wrapper = styled.div`
             }
 
             .post-react {
-              padding: 0.3rem 1rem;
               order: 3;
             }
             .post-action {
@@ -229,6 +234,9 @@ const settings = {
 
 const Post = ({ post, isSpecific }) => {
   const [isModdalVisible, setIsModalVisible] = useState(false);
+  const [commentList, setCommentList] = useState([
+    ...post.comments.slice(0, 2),
+  ]);
   const history = useHistory();
   const carouselRef = useRef();
   const [toggleLikeMutation] = useMutation(TOGGLE_LIKE_POST, {
@@ -325,6 +333,7 @@ const Post = ({ post, isSpecific }) => {
       console.log(error);
     }
   };
+
   const handleToggleSave = async () => {
     try {
       await toggleSaveMutation({
@@ -349,6 +358,19 @@ const Post = ({ post, isSpecific }) => {
       message.success("xóa thành công");
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  const handleViewMoreComment = () => {
+    const currentCommentListLength = commentList.length;
+    if (post.commentsCount > currentCommentListLength) {
+      setCommentList([
+        ...commentList,
+        ...post.comments.slice(
+          currentCommentListLength,
+          currentCommentListLength + 4
+        ),
+      ]);
     }
   };
 
@@ -440,7 +462,7 @@ const Post = ({ post, isSpecific }) => {
         <div className="post-action">
           <div onClick={handleToggleLike}>
             {post.isLiked ? (
-              <HeartFilled style={{ color: "rgb(237 73 86)" }} />
+              <HeartFilled style={{ fill: "#ed4956" }} />
             ) : (
               <HeartOutlined />
             )}
@@ -467,16 +489,25 @@ const Post = ({ post, isSpecific }) => {
           </div>
         </div>
         <div className="post-comment">
+          <div className="comment__list--more">
+            {post.commentsCount > commentList.length && (
+              <span onClick={handleViewMoreComment}>xem thêm bình luận</span>
+            )}
+          </div>
           <div className="comment-list">
             {!!post.commentsCount &&
-              post.comments?.map((comment, index) => (
+              commentList?.map((comment, index) => (
                 <PostComment key={index} comment={comment} />
               ))}
           </div>
         </div>
       </div>
       <div className="post__add-comment">
-        <AddComment isSpecific={isSpecific} post={post} />
+        <AddComment
+          setCommentList={setCommentList}
+          isSpecific={isSpecific}
+          post={post}
+        />
       </div>
     </Wrapper>
   );
