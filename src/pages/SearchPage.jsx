@@ -43,9 +43,15 @@ const SearchPage = () => {
               </>
             ) : (
               <>
-                {postData.searchPosts.map((post, index) => (
-                  <Post key={index} post={post} />
-                ))}
+                {postData.searchPosts.length === 0 ? (
+                  "Không tìm thấy bài viết"
+                ) : (
+                  <>
+                    {postData.searchPosts.map((post, index) => (
+                      <Post key={index} post={post} />
+                    ))}
+                  </>
+                )}
               </>
             )}
           </div>
@@ -64,9 +70,15 @@ const SearchPage = () => {
               </>
             ) : (
               <>
-                {userData.searchUsers.map((user, index) => (
-                  <SuggestUser user={user} key={index} />
-                ))}
+                {userData.searchUsers.length === 0 ? (
+                  "Không tìm thấy người dùng"
+                ) : (
+                  <>
+                    {userData.searchUsers.map((user, index) => (
+                      <SuggestUser user={user} key={index} />
+                    ))}
+                  </>
+                )}
               </>
             )}
           </div>

@@ -43,7 +43,7 @@ const Wrapper = styled.div`
   :hover .overlay {
     display: block;
   }
-  svg {
+  .overlay svg {
     fill: white;
   }
 `;

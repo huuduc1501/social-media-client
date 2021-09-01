@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled, { css } from "styled-components";
-import { useMutation, gql } from "@apollo/client";
+import { useMutation, gql, useApolloClient } from "@apollo/client";
 import { Avatar, message, Modal } from "antd";
 // import Slider from "react-slick";
 
@@ -23,7 +23,7 @@ import {
 import ToggleFollow from "../ToggleFollow";
 import AddComment from "./AddComment";
 import PostComment from "./PostComment";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { GET_ME } from "../../queries/user";
@@ -130,6 +130,10 @@ const Wrapper = styled.div`
     object-fit: cover;
   }
 
+  a {
+    color: unset;
+  }
+
   @media (min-width: 600px) {
     ${(props) =>
       props.isSpecific
@@ -181,6 +185,7 @@ const Wrapper = styled.div`
               position: absolute;
               max-height: calc(100% - 32px);
               overflow-y: scroll;
+              max-width: 88%;
             }
 
             .post-react {
@@ -210,10 +215,18 @@ const MoreMenuWrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 1rem;
+  gap: 4px;
   font-weight: 500;
-  > * {
+  div {
     cursor: pointer;
+    width: 100%;
+    padding: 0.5rem 0.8rem;
+    display: flex;
+    justify-content: center;
+  }
+
+  div:active {
+    background-color: ${(props) => props.theme.bg};
   }
   .danger-action {
     color: red;
@@ -221,9 +234,10 @@ const MoreMenuWrapper = styled.div`
 `;
 
 const settings = {
-  dots: true,
+  // dots: true,
   dynamicHeight: true,
   // infiniteLoop: true,
+  showIndicators: false,
   speed: 500,
   slidesToShow: 1,
   slidesToScroll: 1,
@@ -234,35 +248,19 @@ const settings = {
 
 const Post = ({ post, isSpecific }) => {
   const [isModdalVisible, setIsModalVisible] = useState(false);
+  const client = useApolloClient();
+  const {
+    me: { _id: myId },
+  } = client.readQuery({ query: GET_ME });
+
   const [commentList, setCommentList] = useState([
     ...post.comments.slice(0, 2),
   ]);
   const history = useHistory();
   const carouselRef = useRef();
-  const [toggleLikeMutation] = useMutation(TOGGLE_LIKE_POST, {
-    update: (cache, { data: { toggleLike } }) => {
-      cache.writeFragment({
-        id: `Post:${post._id}`,
-        fragment: gql`
-          fragment modifyPost on Post {
-            isLiked
-            likesCount
-          }
-        `,
-        data: {
-          likesCount:
-            parseInt(post.likesCount) + parseInt(post.isLiked ? -1 : 1),
-          isLiked: !post.isLiked,
-        },
-      });
-    },
-  });
+  const [toggleLikeMutation] = useMutation(TOGGLE_LIKE_POST);
   const [toggleSaveMutation] = useMutation(TOGGLE_SAVE_POST, {
     update: (cache) => {
-      const {
-        me: { _id: myId },
-      } = cache.readQuery({ query: GET_ME });
-
       cache.modify({
         id: `User:${myId}`,
         fields: {
@@ -276,28 +274,10 @@ const Post = ({ post, isSpecific }) => {
           },
         },
       });
-
-      cache.writeFragment({
-        id: `Post:${post._id}`,
-        fragment: gql`
-          fragment moPost on Post {
-            isSaved
-          }
-        `,
-        data: {
-          isSaved: !post.isSaved,
-        },
-      });
     },
   });
 
-  const [deletePostMutation] = useMutation(DELETE_POST, {
-    update: (cache) => {
-      cache.evict({
-        id: `Post:${post._id}`,
-      });
-    },
-  });
+  const [deletePostMutation] = useMutation(DELETE_POST);
 
   // xu li carousel
 
@@ -324,6 +304,20 @@ const Post = ({ post, isSpecific }) => {
 
   const handleToggleLike = async () => {
     try {
+      client.writeFragment({
+        id: `Post:${post._id}`,
+        fragment: gql`
+          fragment isLiked on Post {
+            isLiked
+            likesCount
+          }
+        `,
+        data: {
+          isLiked: !post.isLiked,
+          likesCount:
+            parseInt(post.likesCount) + parseInt(post.isLiked ? -1 : 1),
+        },
+      });
       await toggleLikeMutation({
         variables: {
           postId: post._id,
@@ -336,6 +330,17 @@ const Post = ({ post, isSpecific }) => {
 
   const handleToggleSave = async () => {
     try {
+      client.writeFragment({
+        id: `Post:${post._id}`,
+        fragment: gql`
+          fragment moPost on Post {
+            isSaved
+          }
+        `,
+        data: {
+          isSaved: !post.isSaved,
+        },
+      });
       await toggleSaveMutation({
         variables: {
           postId: post._id,
@@ -348,14 +353,18 @@ const Post = ({ post, isSpecific }) => {
 
   const handleDeletePost = async () => {
     try {
+      client.cache.evict({
+        id: `Post:${post._id}`,
+      });
+      setIsModalVisible(false);
+      if (history.location.pathname !== "/") history.push("/");
+      message.success("xóa thành công");
+
       await deletePostMutation({
         variables: {
           postId: post._id,
         },
       });
-      setIsModalVisible(false);
-      if (history.location.pathname !== "/") history.push("/");
-      message.success("xóa thành công");
     } catch (error) {
       console.log(error);
     }
@@ -374,17 +383,23 @@ const Post = ({ post, isSpecific }) => {
     }
   };
 
+  const handleHideModal = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleVisibleModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleGoToPost = () => {
+    if (history.location.pathname === `/p/${post._id}`) return;
+    history.push(`/p/${post._id}`);
+  };
+
   const moreMenu = (
     <MoreMenuWrapper>
       <div>
-        <span
-          onClick={() => {
-            history.push(`/p/${post._id}`);
-            setIsModalVisible(false);
-          }}
-        >
-          Đi tới bài viết
-        </span>
+        <span onClick={handleGoToPost}>Đi tới bài viết</span>
       </div>
       <div className="danger-action">
         {post.isMine ? (
@@ -394,13 +409,13 @@ const Post = ({ post, isSpecific }) => {
             isFollowing={post.user.isFollowing}
             userId={post.user._id}
           >
-            <span onClick={() => setIsModalVisible(false)}>
+            <span onClick={handleHideModal}>
               {post.user.isFollowing ? "Bỏ theo dõi" : "Theo dõi"}
             </span>
           </ToggleFollow>
         )}
       </div>
-      <div onClick={() => setIsModalVisible(false)}>
+      <div onClick={handleHideModal}>
         <span>Hủy</span>
       </div>
     </MoreMenuWrapper>
@@ -419,14 +434,11 @@ const Post = ({ post, isSpecific }) => {
       </Modal>
       <div className="post-header">
         <div className="post-user">
-          <Avatar
-            src={post.user.avatar}
-            onClick={() => history.push(`/u/${post.user._id}`)}
-          />
-          <span onClick={() => history.push(`/u/${post.user._id}`)}>
-            {post.user.username}
-          </span>
-          <More onClick={() => setIsModalVisible(true)} />
+          <Link to={`/u/${post.user._id}`}>
+            <Avatar src={post.user.avatar} />
+          </Link>
+          <Link to={`/u/${post.user._id}`}> {post.user.username}</Link>
+          <More onClick={handleVisibleModal} />
         </div>
         <div className="post-caption">
           {post.caption?.split(" ").map((word, index) => {
@@ -468,12 +480,7 @@ const Post = ({ post, isSpecific }) => {
             )}
           </div>
           <CommentOutlined />
-          <PlaneOutlined
-            onClick={() => {
-              if (history.location.pathname === `/p/${post._id}`) return;
-              history.push(`/p/${post._id}`);
-            }}
-          />
+          <PlaneOutlined onClick={handleGoToPost} />
           <div onClick={handleToggleSave}>
             {post.isSaved ? <BookmarkFilled /> : <BookmarkOulined />}
           </div>

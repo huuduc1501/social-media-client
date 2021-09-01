@@ -46,8 +46,6 @@ const httpLink = createHttpLink({
     uri: process.env.REACT_APP_API_ENDPOINT,
 });
 
-console.log(process.env.REACT_APP_API_ENDPOINT,)
-
 const authLink = setContext((_, { headers }) => {
     // get the authentication token from local storage if it exists
     const token = localStorage.getItem('token');
@@ -73,6 +71,23 @@ const client = new ApolloClient({
     //         }
     //     })
     // }
+})
+
+client.onResetStore(() => {
+    cache.writeQuery({
+        query: IS_LOGGED_IN,
+        data: {
+            isLoggedIn: false
+        },
+        broadcast: true
+    })
+
+    cache.writeQuery({
+        query: MODE,
+        data: {
+            mode: localStorage.getItem('mode') || 'light'
+        }
+    })
 })
 
 cache.writeQuery({

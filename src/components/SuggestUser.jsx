@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { Avatar } from "antd";
 import ToggleFollow from "./ToggleFollow";
-import { useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const Wrapper = styled.div`
   border: 1px solid ${(props) => props.theme.borderColor};
@@ -26,11 +26,14 @@ const Wrapper = styled.div`
     cursor: pointer;
   }
 
+  a {
+    color: unset;
+  }
+
   button {
     background-color: transparent;
     border: 1px solid ${(props) => props.theme.onSecondSurface};
     border-radius: ${(props) => props.theme.borderRadius};
-    padding: 0.2rem 0.8rem;
     outline: none;
     cursor: pointer;
     transition: border-color 0.3s, background-color 0.3s;
@@ -42,23 +45,25 @@ const Wrapper = styled.div`
 `;
 
 const SuggestUser = ({ user }) => {
-  const history = useHistory();
   return (
     <Wrapper>
-      <Avatar
-        src={user.avatar}
-        onClick={() => history.push(`/u/${user._id}`)}
-      />
+      <Link to={`/u/${user._id}`}>
+        <Avatar src={user.avatar} />
+      </Link>
       <div className="suggest-name">
-        <span onClick={() => history.push(`/u/${user._id}`)}>
-          {user.username}
+        <span>
+          <Link to={`/u/${user._id}`}>{user.username}</Link>
         </span>
         <span>{user.fullname}</span>
       </div>
       {!user.isMe && (
-        <ToggleFollow isFollowing={user.isFollowing} userId={user._id}>
-          <button>{user.isFollowing ? "unfollow" : "follow"}</button>
-        </ToggleFollow>
+        <button>
+          <ToggleFollow
+            isFollowing={user.isFollowing}
+            userId={user._id}
+            style={{ padding: "0.2rem 0.8rem" }}
+          />
+        </button>
       )}
     </Wrapper>
   );

@@ -1,11 +1,44 @@
-import { gql, useMutation } from "@apollo/client";
+import { gql, useApolloClient, useMutation } from "@apollo/client";
 import React from "react";
 import { FOLLOW_USER, GET_ME, UNFOLLOW_USER } from "../queries/user";
 
 const ToggleFollow = ({ userId, isFollowing, children, ...rest }) => {
+  console.log("render toggle");
+
+  const client = useApolloClient();
+  const {
+    me: { _id: myId },
+  } = client.readQuery({ query: GET_ME });
   const [followMutation] = useMutation(FOLLOW_USER, {
     update: (cache) => {
-      cache.writeFragment({
+      cache.modify({
+        id: `User:${myId}`,
+        fields: {
+          followingsCount(currentFollowingsCount) {
+            return currentFollowingsCount + 1;
+          },
+        },
+        broadcast: false,
+      });
+    },
+  });
+  const [unfollowMutation] = useMutation(UNFOLLOW_USER, {
+    update: (cache) => {
+      cache.modify({
+        id: `User:${myId}`,
+        fields: {
+          followingsCount(currentFollowingsCount) {
+            return currentFollowingsCount - 1;
+          },
+        },
+        broadcast: false,
+      });
+    },
+  });
+
+  const handleFollow = async () => {
+    try {
+      client.writeFragment({
         id: `User:${userId}`,
         fragment: gql`
           fragment modifyUser on User {
@@ -16,50 +49,6 @@ const ToggleFollow = ({ userId, isFollowing, children, ...rest }) => {
           isFollowing: true,
         },
       });
-      const {
-        me: { _id: myId },
-      } = cache.readQuery({ query: GET_ME });
-      cache.modify({
-        id: `User:${myId}`,
-        fields: {
-          followingsCount(currentFollowingsCount) {
-            return currentFollowingsCount + 1;
-          },
-        },
-      });
-    },
-  });
-  const [unfollowMutation] = useMutation(UNFOLLOW_USER, {
-    update: (cache) => {
-      cache.writeFragment({
-        id: `User:${userId}`,
-        fragment: gql`
-          fragment modifyUser on User {
-            isFollowing
-          }
-        `,
-        data: {
-          isFollowing: false,
-        },
-      });
-
-      const {
-        me: { _id: myId },
-      } = cache.readQuery({ query: GET_ME });
-      cache.modify({
-        id: `User:${myId}`,
-        fields: {
-          followingsCount(currentFollowingsCount) {
-            return currentFollowingsCount - 1;
-          },
-        },
-        broadcast: true,
-      });
-    },
-  });
-
-  const handleFollow = async () => {
-    try {
       await followMutation({
         variables: {
           userId,
@@ -71,6 +60,17 @@ const ToggleFollow = ({ userId, isFollowing, children, ...rest }) => {
   };
   const handleUnFollow = async () => {
     try {
+      client.writeFragment({
+        id: `User:${userId}`,
+        fragment: gql`
+          fragment modifyUser on User {
+            isFollowing
+          }
+        `,
+        data: {
+          isFollowing: false,
+        },
+      });
       await unfollowMutation({
         variables: {
           userId,
@@ -86,7 +86,7 @@ const ToggleFollow = ({ userId, isFollowing, children, ...rest }) => {
       {...rest}
       onClick={() => (isFollowing ? handleUnFollow() : handleFollow())}
     >
-      {children}
+      {isFollowing ? "Following" : "Follow"}
     </div>
   );
 };

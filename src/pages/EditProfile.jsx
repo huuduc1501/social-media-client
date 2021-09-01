@@ -87,17 +87,21 @@ const EditProfile = () => {
   const onFinish = async (values) => {
     setIsUpdating(true);
     const editObj = { ...values };
-    console.log(editObj);
     if (avatarFile.file) {
       try {
         editObj.avatar = await uploadImage(avatarFile.file);
-        console.log(editObj);
       } catch (error) {
         setIsUpdating(false);
         message.error("tải lên thất bại");
       }
     }
     try {
+      // client.writeQuery({
+      //   query: GET_ME,
+      //   data: {
+      //     ...editObj,
+      //   },
+      // });
       await editProfileMutation({
         variables: editObj,
       });

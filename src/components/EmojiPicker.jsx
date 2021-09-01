@@ -25,7 +25,6 @@ const Wrapper = styled.div`
 `;
 
 export const clickOutsideRef = (contentRef, toggleRef) => {
-  console.log(contentRef, toggleRef);
   document.addEventListener("mousedown", (e) => {
     // user click toggle
     if (toggleRef.current && toggleRef.current.contains(e.target)) {

@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Button, Form, Input, Typography } from 'antd';
+import { Button, Form, Input, notification, Typography } from 'antd';
 import { useMutation } from '@apollo/client';
 import { SIGNUP, VALIDATE_EMAIL, VALIDATE_USERNAME } from '../../queries/auth';
 import { IS_LOGGED_IN } from '../../queries/client';
@@ -18,7 +18,6 @@ const Signup = ({ changeToSignin }) => {
     const [signupMutation, { loading }
     ] = useMutation(SIGNUP, {
         update: (cache, { data: { signup } }) => {
-            console.log(signup.token)
             localStorage.setItem('token', signup.token);
             cache.writeQuery({
                 query: IS_LOGGED_IN,
@@ -51,6 +50,9 @@ const Signup = ({ changeToSignin }) => {
         try {
             await signupMutation({
                 variables: values,
+            })
+            notification.success({
+                message: 'Tạo thành công',
             })
         } catch (error) {
             console.log(error)

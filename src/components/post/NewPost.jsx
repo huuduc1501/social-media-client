@@ -4,7 +4,7 @@ import TextArea from "antd/lib/input/TextArea";
 import { useApolloClient, useMutation } from "@apollo/client";
 import styled from "styled-components";
 import { GET_ME } from "../../queries/user";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { ImageOutlined, PlusOutlined } from "../Icon";
 
 import { CREATE_POST } from "../../queries/post";
@@ -47,6 +47,9 @@ const Wrapper = styled.div`
   textarea:focus {
     border-color: unset;
     box-shadow: unset;
+  }
+  a {
+    color: unset;
   }
   .ant-upload.ant-upload-select-picture-card {
     background-color: ${(props) => props.theme.bg};
@@ -130,7 +133,6 @@ const NewPost = () => {
   };
 
   const onHandleCreatePost = async () => {
-    console.log("upload");
     let caption;
     let tags = [];
     let files = [];
@@ -171,13 +173,10 @@ const NewPost = () => {
     <Wrapper>
       <div className="new__post-header">
         <div className="header-left">
-          <Avatar
-            src={me.avatar}
-            onClick={() => history.push(`/u/${me._id}`)}
-          />
-          <span onClick={() => history.push(`/u/${me._id}`)}>
-            {me.username}
-          </span>
+          <Link to={`/u/${me._id}`}>
+            <Avatar src={me.avatar} />
+          </Link>
+          <Link to={`/u/${me._id}`}>{me.username}</Link>
         </div>
 
         <div className="header-right">
