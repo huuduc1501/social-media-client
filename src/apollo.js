@@ -43,8 +43,10 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
 });
 
 const httpLink = createHttpLink({
-    uri: 'http://localhost:5000/graphql',
+    uri: process.env.REACT_APP_API_ENDPOINT,
 });
+
+console.log(process.env.REACT_APP_API_ENDPOINT,)
 
 const authLink = setContext((_, { headers }) => {
     // get the authentication token from local storage if it exists
