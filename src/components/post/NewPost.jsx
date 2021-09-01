@@ -206,6 +206,7 @@ const NewPost = () => {
           name="caption"
           placeholder="Đăng bài"
           onChange={(e) => setTextAreaValue(e.target.value)}
+          maxLength={100}
         />
       </div>
       <div className="new__post-footer">
@@ -218,6 +219,7 @@ const NewPost = () => {
             onChange={handleChangeFile}
             multiple={true}
             accept="image/*"
+            maxCount={8}
           >
             <UploadWrapper>
               <PlusOutlined />

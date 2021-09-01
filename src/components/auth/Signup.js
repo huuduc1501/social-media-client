@@ -18,6 +18,7 @@ const Signup = ({ changeToSignin }) => {
     const [signupMutation, { loading }
     ] = useMutation(SIGNUP, {
         update: (cache, { data: { signup } }) => {
+            console.log(signup.token)
             localStorage.setItem('token', signup.token);
             cache.writeQuery({
                 query: IS_LOGGED_IN,
@@ -33,7 +34,6 @@ const Signup = ({ changeToSignin }) => {
         if (username.trim().split(' ').length !== 1)
             return Promise.reject(new Error('tên không được chứa khoảng trắng'))
         const d = await validateUsernameMutation({ variables: { username } })
-        console.log(d.data.validateUsername)
         if (d.data.validateUsername) return Promise.resolve()
         return Promise.reject(new Error('tên này đã được đăng kí'))
     }

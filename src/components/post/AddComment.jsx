@@ -82,6 +82,7 @@ const AddComment = ({ post, setCommentList }) => {
         name="text"
         onChange={(e) => setTextAreaValue(e.target.value)}
         placeholder="Thêm bình luận"
+        maxLength={100}
       />
       <Send className="emoji-send" onClick={handleAddComment} />
     </Wrapper>
