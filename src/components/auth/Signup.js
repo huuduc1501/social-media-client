@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Button, Form, Input, Typography } from 'antd';
-import { useLazyQuery, useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import { SIGNUP, VALIDATE_EMAIL, VALIDATE_USERNAME } from '../../queries/auth';
 import { IS_LOGGED_IN } from '../../queries/client';
 
@@ -15,7 +15,7 @@ const Signup = ({ changeToSignin }) => {
     const [validateUsernameMutation] = useMutation(VALIDATE_USERNAME)
     const [form] = Form.useForm()
 
-    const [signupMutation, { loading, error, data }
+    const [signupMutation, { loading }
     ] = useMutation(SIGNUP, {
         update: (cache, { data: { signup } }) => {
             localStorage.setItem('token', signup.token);

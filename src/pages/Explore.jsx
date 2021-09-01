@@ -76,6 +76,18 @@ const Explore = () => {
             hasMore={data.suggestPosts.paging.hasMore}
             next={onHandleFetchMore}
             className="explore__post-list"
+            loader={
+              <>
+                <Skeleton.Image
+                  active
+                  style={{ width: "300px", height: "300px" }}
+                />
+                <Skeleton.Image
+                  active
+                  style={{ width: "300px", height: "300px" }}
+                />{" "}
+              </>
+            }
             endMessage={
               <p>
                 <b>Yay! Bạn đã khám phá tất cả các bài đăng</b>

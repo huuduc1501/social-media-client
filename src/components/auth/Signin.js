@@ -11,7 +11,7 @@ const Wrapper = styled.div`
 const { Title, Text } = Typography
 
 const Signin = ({ changeToSignup }) => {
-    const [signinMutation, { loading, error, }
+    const [signinMutation, { loading, }
     ] = useMutation(SIGNIN, {
         update: (cache, { data: { signin } }) => {
             localStorage.setItem('token', signin.token)

@@ -93,6 +93,7 @@ const Home = () => {
                     <b>Yay! Bạn đã xem tất cả các bài đăng</b>
                   </p>
                 }
+                loader={<Skeleton avatar paragraph={4} />}
                 // refreshFunction={async () => await refetch()}
                 // pullDownToRefresh
                 // pullDownToRefreshThreshold={50}
@@ -127,12 +128,12 @@ const Home = () => {
                 ]}
               </>
             ) : (
-              ""
+              <>
+                {sgData?.suggestUsers.map((user, index) => {
+                  return <SuggestUser key={index} user={user} />;
+                })}
+              </>
             )}
-            {sgError ? sgError.message : ""}
-            {sgData?.suggestUsers.map((user, index) => {
-              return <SuggestUser key={index} user={user} />;
-            })}
           </div>
         </Col>
       </Row>
