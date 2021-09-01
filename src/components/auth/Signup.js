@@ -18,7 +18,6 @@ const Signup = ({ changeToSignin }) => {
     const [signupMutation, { loading }
     ] = useMutation(SIGNUP, {
         update: (cache, { data: { signup } }) => {
-            console.log(signup.token)
             localStorage.setItem('token', signup.token);
             cache.writeQuery({
                 query: IS_LOGGED_IN,

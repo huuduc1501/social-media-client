@@ -24,7 +24,7 @@ const Wrapper = styled.div`
 const AddComment = ({ post, setCommentList }) => {
   const [textAreaValue, setTextAreaValue] = useState("");
 
-  const [addCommentMutation] = useMutation(ADD_COMMENT, {
+  const [addCommentMutation, { loading }] = useMutation(ADD_COMMENT, {
     update: (cache, { data: { addComment } }) => {
       setCommentList((commentList) => [...commentList, addComment]);
 
@@ -53,7 +53,7 @@ const AddComment = ({ post, setCommentList }) => {
   });
 
   const handleAddComment = async (e) => {
-    if (!textAreaValue) return;
+    if (!textAreaValue || loading) return;
     try {
       await addCommentMutation({
         variables: {
@@ -65,6 +65,7 @@ const AddComment = ({ post, setCommentList }) => {
     } catch (error) {
       console.error(error);
     }
+    e.target.disabled = false;
   };
 
   return (

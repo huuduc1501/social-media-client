@@ -1,6 +1,6 @@
 import { Avatar, Comment } from "antd";
 import React from "react";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import styled from "styled-components";
 
 const Wrapper = styled.div`
@@ -27,18 +27,14 @@ const PostComment = ({ comment }) => {
     <Wrapper>
       <Comment
         author={
-          <span
-            className="username"
-            onClick={() => history.push(`/u/${comment.user._id}`)}
-          >
+          <Link to={`/u/${comment.user._id}`} className="username">
             {comment.user.username}
-          </span>
+          </Link>
         }
         avatar={
-          <Avatar
-            src={comment.user.avatar}
-            onClick={() => history.push(`/u/${comment.user._id}`)}
-          />
+          <Link to={`/u/${comment.user._id}`} className="username">
+            <Avatar src={comment.user.avatar} />
+          </Link>
         }
         content={<p className="comment">{comment.text}</p>}
       />

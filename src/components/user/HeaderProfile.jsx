@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { Button, Space } from "antd";
+import { Button, Skeleton, Space } from "antd";
 import ToggleFollow from "../ToggleFollow";
 import Modal from "antd/lib/modal/Modal";
 import SuggestUser from "../SuggestUser";
@@ -68,7 +68,7 @@ const Wrapper = styled.div`
   }
 
   @media (max-width: 600px) {
-    column-gap: .6rem;
+    column-gap: 0.6rem;
     img {
       width: 100px;
       height: 100px;
@@ -100,10 +100,14 @@ const Wrapper = styled.div`
 const HeaderProfile = ({ user }) => {
   const [isFollowingModalVisible, setIsFollowingModalVisible] = useState(false);
   const [isFollowerModalVisible, setIsFollowerModalVisible] = useState(false);
-  const [getFollowings, { loading: followingLoading, data: followingsData }] =
-    useLazyQuery(GET_FOLLOWINGS, {});
-  const [getFollwers, { loading: followerLoading, data: followersData }] =
-    useLazyQuery(GET_FOLLOWERS);
+  const [getFollowings, { loading: followingsLoading, data: followingsData }] =
+    useLazyQuery(GET_FOLLOWINGS, {
+      fetchPolicy: "cache-first",
+    });
+  const [getFollwers, { loading: followersLoading, data: followersData }] =
+    useLazyQuery(GET_FOLLOWERS, {
+      fetchPolicy: "cache-first",
+    });
 
   const handleGetFollowings = async () => {
     try {
@@ -126,25 +130,33 @@ const HeaderProfile = ({ user }) => {
           userId: user._id,
         },
       });
-      console.log("handle");
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const handleCancleFollowerModal = () => {
+    setIsFollowerModalVisible(false);
+  };
+  const handleCancleFollowingModal = () => {
+    setIsFollowingModalVisible(false);
   };
 
   return (
     <>
       <FollowModal
         title="Đang theo dõi"
+        loading={followingsLoading}
         data={followingsData?.getProfile.followings}
         visible={isFollowingModalVisible}
-        onCancel={() => setIsFollowingModalVisible(false)}
-      />{" "}
+        onCancel={handleCancleFollowingModal}
+      />
       <FollowModal
         title="Theo dõi"
+        loading={followersLoading}
         data={followersData?.getProfile.followers}
         visible={isFollowerModalVisible}
-        onCancel={() => setIsFollowerModalVisible(false)}
+        onCancel={handleCancleFollowerModal}
       />
       <Wrapper>
         <div className="profile-avatar">
@@ -159,11 +171,13 @@ const HeaderProfile = ({ user }) => {
                 <Button>chỉnh sửa thông tin</Button>
               </Link>
             ) : (
-              <ToggleFollow isFollowing={user.isFollowing} userId={user._id}>
-                <Button type="primary">
-                  {user.isFollowing ? "Đang theo dõi" : "Theo dõi"}
-                </Button>
-              </ToggleFollow>
+              <Button type="primary" style={{ padding: "0" }}>
+                <ToggleFollow
+                  isFollowing={user.isFollowing}
+                  userId={user._id}
+                  style={{ padding: "0.4rem 0.8rem" }}
+                />
+              </Button>
             )}
 
             <Options />
@@ -189,7 +203,7 @@ const HeaderProfile = ({ user }) => {
   );
 };
 
-const FollowModal = ({ data, ...rest }) => {
+const FollowModal = ({ data, loading, ...rest }) => {
   return (
     <Modal
       {...rest}
@@ -198,14 +212,23 @@ const FollowModal = ({ data, ...rest }) => {
       width="400px"
       bodyStyle={{ maxHeight: "70vh", overflowY: "auto" }}
     >
-      {data?.length ? (
-        <Space direction="vertical" style={{ width: "100%" }}>
-          {data.map((u, index) => {
-            return <SuggestUser user={u} key={index} />;
-          })}
-        </Space>
+      {loading ? (
+        <>
+          <Skeleton active avatar paragraph={2} />
+          <Skeleton active avatar paragraph={2} />
+        </>
       ) : (
-        "Chưa có người theo dõi"
+        <>
+          {data?.length ? (
+            <Space direction="vertical" style={{ width: "100%" }}>
+              {data.map((u, index) => {
+                return <SuggestUser user={u} key={index} />;
+              })}
+            </Space>
+          ) : (
+            "Chưa có người theo dõi"
+          )}
+        </>
       )}
     </Modal>
   );
