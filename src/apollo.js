@@ -73,6 +73,23 @@ const client = new ApolloClient({
     // }
 })
 
+client.onResetStore(() => {
+    cache.writeQuery({
+        query: IS_LOGGED_IN,
+        data: {
+            isLoggedIn: false
+        },
+        broadcast: true
+    })
+
+    cache.writeQuery({
+        query: MODE,
+        data: {
+            mode: localStorage.getItem('mode') || 'light'
+        }
+    })
+})
+
 cache.writeQuery({
     query: IS_LOGGED_IN,
     data: {

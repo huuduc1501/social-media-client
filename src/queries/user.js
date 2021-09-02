@@ -121,6 +121,7 @@ export const EDIT_PROFILE = gql`
             fullname 
             bio 
             email
+            avatar
         }
     }
 `

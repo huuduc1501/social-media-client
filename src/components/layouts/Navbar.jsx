@@ -68,6 +68,7 @@ const Wrapper = styled.div`
 
 const DropdownWrapper = styled.div`
   padding: 0.5rem 1rem;
+  width: max-content;
   background-color: ${(props) => props.theme.primaryColor};
   color: ${(props) => props.theme.onPrimary};
   display: flex;
@@ -102,12 +103,16 @@ const Navbar = () => {
   const { me } = client.readQuery({ query: GET_ME });
   const { mode } = client.readQuery({ query: MODE });
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     localStorage.removeItem("token");
-    client.writeQuery({
+
+    await client.writeQuery({
       query: IS_LOGGED_IN,
       data: { isLoggedIn: false },
     });
+    // await client.clearStore();
+
+    client.resetStore();
   };
 
   const handleChangeThemeMode = () => {

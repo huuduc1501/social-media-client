@@ -215,10 +215,18 @@ const MoreMenuWrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 1rem;
+  gap: 4px;
   font-weight: 500;
-  > * {
+  div {
     cursor: pointer;
+    width: 100%;
+    padding: 0.5rem 0.8rem;
+    display: flex;
+    justify-content: center;
+  }
+
+  div:active {
+    background-color: ${(props) => props.theme.bg};
   }
   .danger-action {
     color: red;
@@ -269,13 +277,7 @@ const Post = ({ post, isSpecific }) => {
     },
   });
 
-  const [deletePostMutation] = useMutation(DELETE_POST, {
-    update: (cache) => {
-      cache.evict({
-        id: `Post:${post._id}`,
-      });
-    },
-  });
+  const [deletePostMutation] = useMutation(DELETE_POST);
 
   // xu li carousel
 
@@ -351,14 +353,18 @@ const Post = ({ post, isSpecific }) => {
 
   const handleDeletePost = async () => {
     try {
+      client.cache.evict({
+        id: `Post:${post._id}`,
+      });
+      setIsModalVisible(false);
+      if (history.location.pathname !== "/") history.push("/");
+      message.success("xóa thành công");
+
       await deletePostMutation({
         variables: {
           postId: post._id,
         },
       });
-      setIsModalVisible(false);
-      if (history.location.pathname !== "/") history.push("/");
-      message.success("xóa thành công");
     } catch (error) {
       console.log(error);
     }

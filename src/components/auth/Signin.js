@@ -19,7 +19,8 @@ const Signin = ({ changeToSignup }) => {
                 query: IS_LOGGED_IN,
                 data: {
                     isLoggedIn: true
-                }
+                },
+                broadcast: true,
             })
         },
         errorPolicy: 'none',
@@ -34,18 +35,14 @@ const Signin = ({ changeToSignup }) => {
                     password: values.password,
                 },
             })
-            return true
+
         } catch (error) {
             notification.error({
                 message: error.message,
             })
-            return false
         }
 
     };
-    if (loading) return <h1>loading...</h1>
-    // if (error) return error.message
-
 
     const onFinishFailed = (errorInfo) => {
         console.log('Failed:', errorInfo);
@@ -91,7 +88,7 @@ const Signin = ({ changeToSignup }) => {
                 </Form.Item>
 
                 <Form.Item className='form-button'>
-                    <Button type="primary" htmlType="submit">
+                    <Button loading={loading} type="primary" htmlType="submit">
                         Đăng nhập
                     </Button>
                 </Form.Item>

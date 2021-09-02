@@ -96,6 +96,12 @@ const EditProfile = () => {
       }
     }
     try {
+      // client.writeQuery({
+      //   query: GET_ME,
+      //   data: {
+      //     ...editObj,
+      //   },
+      // });
       await editProfileMutation({
         variables: editObj,
       });

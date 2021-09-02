@@ -14,7 +14,6 @@ const Wrapper = styled.div`
   gap: 0.3rem;
   column-gap: 2rem;
   grid-template-columns: auto 1fr;
-  line-height: 3rem;
   .profile-avatar {
     margin: auto;
     grid-row: 1/4;
