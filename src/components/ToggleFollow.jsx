@@ -24,6 +24,7 @@ const ToggleFollow = ({ userId, children, ...rest }) => {
             return parseInt(currentFollowingsCount) + 1;
           },
         },
+        broadcast: false,
       });
     },
   });
