@@ -77,9 +77,8 @@ client.onResetStore(() => {
     cache.writeQuery({
         query: IS_LOGGED_IN,
         data: {
-            isLoggedIn: false
+            isLoggedIn: !!localStorage.getItem('token')
         },
-        broadcast: true
     })
 
     cache.writeQuery({

@@ -44,6 +44,7 @@ const Wrapper = styled.div`
     display: flex;
     gap: 1rem;
   }
+
   .action {
     display: flex;
     justify-content: center;
@@ -92,6 +93,7 @@ const Wrapper = styled.div`
       flex-direction: column;
       align-items: center;
       line-height: 1.2rem;
+      width: 33.33%;
     }
   }
 `;
@@ -172,7 +174,6 @@ const HeaderProfile = ({ user }) => {
             ) : (
               <Button type="primary" style={{ padding: "0" }}>
                 <ToggleFollow
-                  isFollowing={user.isFollowing}
                   userId={user._id}
                   style={{ padding: "0.4rem 0.8rem" }}
                 />
@@ -191,10 +192,10 @@ const HeaderProfile = ({ user }) => {
             <span>{user.postsCount} </span>bài viết
           </div>
           <div onClick={handleGetFollowings}>
-            <span>{user.followingsCount} </span>đang theo dõi
+            đang theo dõi <span>{user.followingsCount} </span> người
           </div>
           <div onClick={handleGetFollowers}>
-            <span>{user.followersCount} </span>theo dõi
+            <span>{user.followersCount} </span>người theo dõi
           </div>
         </div>
       </Wrapper>

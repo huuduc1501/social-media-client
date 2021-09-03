@@ -5,9 +5,10 @@ import ToggleFollow from "./ToggleFollow";
 import { Link } from "react-router-dom";
 
 const Wrapper = styled.div`
-  border: 1px solid ${(props) => props.theme.borderColor};
+  /* border: 1px solid ${(props) => props.theme.borderColor}; */
   border-radius: ${(props) => props.theme.borderRadius};
   background-color: ${(props) => props.theme.surface};
+  box-shadow: ${(props) => props.theme.boxShadow};
   padding: 0.5rem 1rem;
   display: flex;
   gap: 0.5rem;
@@ -40,7 +41,7 @@ const Wrapper = styled.div`
   }
   button:hover {
     border-color: ${(props) => props.theme.onSurface};
-    background-color: ${(props) => props.theme.bg};
+    background-color: ${(props) => props.theme.secondSurface};
   }
 `;
 
@@ -59,7 +60,6 @@ const SuggestUser = ({ user }) => {
       {!user.isMe && (
         <button>
           <ToggleFollow
-            isFollowing={user.isFollowing}
             userId={user._id}
             style={{ padding: "0.2rem 0.8rem" }}
           />

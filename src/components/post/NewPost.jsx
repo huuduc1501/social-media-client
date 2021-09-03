@@ -14,7 +14,8 @@ import EmojiPicker from "../EmojiPicker";
 const Wrapper = styled.div`
   padding: 0.5rem 1rem;
   background-color: ${(props) => props.theme.surface};
-  border: 1px solid ${(props) => props.theme.borderColor};
+  box-shadow: ${(props) => props.theme.boxShadow};
+  /* border: 1px solid ${(props) => props.theme.borderColor}; */
   border-radius: ${(props) => props.theme.borderRadius};
   color: ${(props) => props.theme.onSurface};
 
@@ -25,6 +26,9 @@ const Wrapper = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
+  }
+  .header-left {
+    font-weight: 500;
   }
   .new__post-header > * {
     display: flex;
@@ -40,7 +44,7 @@ const Wrapper = styled.div`
   }
 
   textarea {
-    background: ${(props) => props.theme.bg};
+    background: ${(props) => props.theme.secondSurface};
     color: ${(props) => props.theme.onBg};
     border: 0;
   }
@@ -52,7 +56,7 @@ const Wrapper = styled.div`
     color: unset;
   }
   .ant-upload.ant-upload-select-picture-card {
-    background-color: ${(props) => props.theme.bg};
+    background-color: ${(props) => props.theme.secondSurface};
     color: ${(props) => props.theme.onBg};
   }
   .ant-upload.ant-upload-select-picture-card .text {
@@ -62,7 +66,6 @@ const Wrapper = styled.div`
 const UploadWrapper = styled.div``;
 
 const NewPost = () => {
-  const history = useHistory();
   const client = useApolloClient();
   const { me } = client.readQuery({ query: GET_ME });
   const [imageList, setImageList] = useState([]);

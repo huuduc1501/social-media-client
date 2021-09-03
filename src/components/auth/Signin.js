@@ -20,7 +20,6 @@ const Signin = ({ changeToSignup }) => {
                 data: {
                     isLoggedIn: true
                 },
-                broadcast: true,
             })
         },
         errorPolicy: 'none',
@@ -58,6 +57,7 @@ const Signin = ({ changeToSignup }) => {
                 wrapperCol={{
                     span: 16,
                 }}
+                initialValues={{ email: 'guest@gmail.com', password: '123456' }}
                 onFinish={onFinish}
                 onFinishFailed={onFinishFailed}
             >

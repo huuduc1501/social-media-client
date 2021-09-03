@@ -1,6 +1,6 @@
 import { Avatar, Comment } from "antd";
 import React from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 const Wrapper = styled.div`
@@ -18,10 +18,17 @@ const Wrapper = styled.div`
   .comment {
     color: ${(props) => props.theme.onSecondSurface};
   }
+
+  .ant-comment-content {
+    flex-grow: unset;
+    background-color: ${(props) => props.theme.secondSurface};
+    padding: 0.2rem 0.8rem;
+    border-radius: ${(props) => props.theme.borderRadius};
+  }
+
 `;
 
 const PostComment = ({ comment }) => {
-  const history = useHistory();
   if (!comment) return null;
   return (
     <Wrapper>

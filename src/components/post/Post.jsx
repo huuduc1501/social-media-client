@@ -33,7 +33,8 @@ const Wrapper = styled.div`
   max-width: 100%;
   background-color: ${(props) => props.theme.surface};
   color: ${(props) => props.theme.onSurface};
-  border: 1px solid ${(props) => props.theme.borderColor};
+  box-shadow: ${(props) => props.theme.boxShadow};
+  /* border: 1px solid ${(props) => props.theme.borderColor}; */
   border-radius: ${(props) => props.theme.borderRadius};
   display: grid;
   grid-template-rows: auto;
@@ -55,6 +56,7 @@ const Wrapper = styled.div`
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    font-weight: 500;
   }
   .post-user > * {
     cursor: pointer;
@@ -71,12 +73,14 @@ const Wrapper = styled.div`
   }
 
   .post-body {
+    height: max-content;
+    min-height: 200px;
     max-height: 660px;
     border-top: 1px solid ${(props) => props.theme.borderColor};
     border-bottom: 1px solid ${(props) => props.theme.borderColor};
   }
   .post-body * {
-    max-height: inherit;
+    /* max-height: inherit; */
   }
   .post-action {
     display: flex;
@@ -125,8 +129,8 @@ const Wrapper = styled.div`
 
   .post-body img {
     width: 100%;
-    max-height: 100%;
-    /* height: auto; */
+    max-height: 660px;
+    height: auto;
     object-fit: cover;
   }
 
@@ -225,8 +229,8 @@ const MoreMenuWrapper = styled.div`
     justify-content: center;
   }
 
-  div:active {
-    background-color: ${(props) => props.theme.bg};
+  div:hover {
+    background-color: ${(props) => props.theme.secondSurface};
   }
   .danger-action {
     color: red;
@@ -281,26 +285,26 @@ const Post = ({ post, isSpecific }) => {
 
   // xu li carousel
 
-  useEffect(() => {
-    if (carouselRef.current) {
-      // console.log(carouselRef.current.listRef);
-      // const imgs = document.getElementsByClassName(`image-slider-${post._id}`);
-      const imgs = carouselRef.current.listRef;
+  // useEffect(() => {
+  //   if (carouselRef.current) {
+  //     // console.log(carouselRef.current.listRef);
+  //     // const imgs = document.getElementsByClassName(`image-slider-${post._id}`);
+  //     const imgs = carouselRef.current.listRef;
 
-      // console.log(imgs[0].height);
-      let minHeight = imgs[0]?.height;
+  //     // console.log(imgs[0].height);
+  //     let minHeight = imgs[0]?.height;
 
-      if (imgs.length > 2) {
-        for (let i = 0; i < imgs.length; i++) {
-          if (minHeight < imgs[i].height && imgs[i].height !== 0)
-            minHeight = imgs[i].height;
-        }
+  //     if (imgs.length > 2) {
+  //       for (let i = 0; i < imgs.length; i++) {
+  //         if (minHeight < imgs[i].height && imgs[i].height !== 0)
+  //           minHeight = imgs[i].height;
+  //       }
 
-        const postBody = document.getElementById(`body-${post._id}`);
-        if (postBody && minHeight !== 0) postBody.style.height = minHeight;
-      }
-    }
-  }, [post._id]);
+  //       const postBody = document.getElementById(`body-${post._id}`);
+  //       if (postBody && minHeight !== 0) postBody.style.height = minHeight;
+  //     }
+  //   }
+  // }, [post._id]);
 
   const handleToggleLike = async () => {
     try {
@@ -401,14 +405,13 @@ const Post = ({ post, isSpecific }) => {
       <div>
         <span onClick={handleGoToPost}>Đi tới bài viết</span>
       </div>
-      <div className="danger-action">
+      <div>
         {post.isMine ? (
-          <span onClick={handleDeletePost}>Xóa bài</span>
+          <span className="danger-action" onClick={handleDeletePost}>
+            Xóa bài
+          </span>
         ) : (
-          <ToggleFollow
-            isFollowing={post.user.isFollowing}
-            userId={post.user._id}
-          >
+          <ToggleFollow userId={post.user._id} style={{ padding: "0" }}>
             <span onClick={handleHideModal}>
               {post.user.isFollowing ? "Bỏ theo dõi" : "Theo dõi"}
             </span>

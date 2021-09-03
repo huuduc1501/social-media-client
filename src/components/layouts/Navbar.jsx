@@ -3,9 +3,9 @@ import styled from "styled-components";
 import { Avatar, Space, Dropdown } from "antd";
 import CreatePostModal from "../post/CreatePostModal";
 import { useApolloClient } from "@apollo/client";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 
-import { GET_ME } from "../../queries/user";
+import { GET_ME, GET_NEW_FEED } from "../../queries/user";
 import logo from "../../assets/images/SM-logo.jpeg";
 import {
   HomeOutlined,
@@ -84,7 +84,7 @@ const DropdownWrapper = styled.div`
   }
 
   .dropdown-item:hover {
-    background-color: ${(props) => props.theme.bg};
+    background-color: ${(props) => props.theme.secondSurface};
   }
 
   svg {
@@ -102,6 +102,7 @@ const Navbar = () => {
   const client = useApolloClient();
   const { me } = client.readQuery({ query: GET_ME });
   const { mode } = client.readQuery({ query: MODE });
+  // const { pathName } = useLocation();
 
   const handleLogout = async () => {
     localStorage.removeItem("token");
@@ -121,6 +122,14 @@ const Navbar = () => {
       data: { mode: mode === "dark" ? "light" : "dark" },
     });
     localStorage.setItem("mode", mode === "dark" ? "light" : "dark");
+  };
+
+  const handleRefecthFeed = async () => {
+    // await client.refetchQueries(GET_NEW_FEED);
+    // if (pathName === "/") {
+    //   await client.resetStore();
+    // }
+    return;
   };
 
   const userDropdown = (
@@ -163,15 +172,20 @@ const Navbar = () => {
         <div className="right">
           <Space size="middle">
             <div className="navbar-item">
-              <NavLink exact={true} to="/" activeClassName="active">
+              <NavLink
+                exact={true}
+                to="/"
+                activeClassName="active"
+                onClick={handleRefecthFeed}
+              >
                 <HomeOutlined />
               </NavLink>
             </div>
-            <div className="navbar-item">
+            {/* <div className="navbar-item">
               <NavLink to="/chat" activeClassName="active">
                 <CommentOutlined />
               </NavLink>
-            </div>
+            </div> */}
             <div className="navbar-item">
               <NavLink to="/explore" activeClassName="active">
                 <ExploreOutlined />

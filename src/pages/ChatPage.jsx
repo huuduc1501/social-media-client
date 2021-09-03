@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import underC from "../assets/images/under-construction.webp";
+import Loading from "../components/Loading";
 
 const Wrapper = styled.div`
   height: 80vh;
@@ -9,7 +10,10 @@ const Wrapper = styled.div`
 `;
 
 const ChatPage = () => {
-  return <Wrapper></Wrapper>;
+  return (
+    <Wrapper>
+    </Wrapper>
+  );
 };
 
 export default ChatPage;

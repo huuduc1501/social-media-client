@@ -2,23 +2,28 @@ import { gql, useApolloClient, useMutation } from "@apollo/client";
 import React from "react";
 import { FOLLOW_USER, GET_ME, UNFOLLOW_USER } from "../queries/user";
 
-const ToggleFollow = ({ userId, isFollowing, children, ...rest }) => {
-  console.log("render toggle");
-
+const ToggleFollow = ({ userId, children, ...rest }) => {
   const client = useApolloClient();
   const {
     me: { _id: myId },
   } = client.readQuery({ query: GET_ME });
+  const { isFollowing } = client.readFragment({
+    id: `User:${userId}`,
+    fragment: gql`
+      fragment following on User {
+        isFollowing
+      }
+    `,
+  });
   const [followMutation] = useMutation(FOLLOW_USER, {
     update: (cache) => {
       cache.modify({
         id: `User:${myId}`,
         fields: {
           followingsCount(currentFollowingsCount) {
-            return currentFollowingsCount + 1;
+            return parseInt(currentFollowingsCount) + 1;
           },
         },
-        broadcast: false,
       });
     },
   });
@@ -28,64 +33,44 @@ const ToggleFollow = ({ userId, isFollowing, children, ...rest }) => {
         id: `User:${myId}`,
         fields: {
           followingsCount(currentFollowingsCount) {
-            return currentFollowingsCount - 1;
+            return parseInt(currentFollowingsCount) - 1;
           },
         },
-        broadcast: false,
       });
     },
   });
 
   const handleFollow = async () => {
     try {
-      client.writeFragment({
+      client.cache.modify({
         id: `User:${userId}`,
-        fragment: gql`
-          fragment modifyUser on User {
-            isFollowing
-          }
-        `,
-        data: {
-          isFollowing: true,
+        fields: {
+          isFollowing(current) {
+            console.log(current);
+            return !current;
+          },
         },
       });
-      await followMutation({
-        variables: {
-          userId,
-        },
-      });
-    } catch (error) {
-      console.error(error.message);
-    }
-  };
-  const handleUnFollow = async () => {
-    try {
-      client.writeFragment({
-        id: `User:${userId}`,
-        fragment: gql`
-          fragment modifyUser on User {
-            isFollowing
-          }
-        `,
-        data: {
-          isFollowing: false,
-        },
-      });
-      await unfollowMutation({
-        variables: {
-          userId,
-        },
-      });
+      if (isFollowing) {
+        unfollowMutation({
+          variables: {
+            userId,
+          },
+        });
+      } else {
+        followMutation({
+          variables: {
+            userId,
+          },
+        });
+      }
     } catch (error) {
       console.error(error.message);
     }
   };
 
   return (
-    <div
-      {...rest}
-      onClick={() => (isFollowing ? handleUnFollow() : handleFollow())}
-    >
+    <div {...rest} onClick={handleFollow}>
       {isFollowing ? "Following" : "Follow"}
     </div>
   );

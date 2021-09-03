@@ -6,7 +6,7 @@ import styled from "styled-components";
 
 const Wrapper = styled.div`
   input {
-    background: ${(props) => props.theme.bg};
+    background: ${(props) => props.theme.secondSurface};
     color: ${(props) => props.theme.onBg};
     outline: none;
     border: none;

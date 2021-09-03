@@ -4,10 +4,10 @@ import { GlobleConnection } from "./Icon";
 
 const rotate360 = keyframes`
     from {
-        transform:rotate(0deg);
+        transform: rotate(0deg);
     }
     to {
-        transform:rotate(306deg);
+        transform: rotate(360deg);
     }
 `;
 

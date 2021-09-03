@@ -70,6 +70,7 @@ export const GET_FOLLOWINGS = gql`
 
     query getFollowings($userId:ID!) {
         getProfile(userId:$userId){
+            _id
             followingsCount
             followings {
                 ...BasicUserFields
@@ -83,6 +84,7 @@ export const GET_FOLLOWERS = gql`
 
     query getFollowers($userId:ID!) {
         getProfile(userId:$userId){
+            _id
             followersCount
             followers {
                 ...BasicUserFields

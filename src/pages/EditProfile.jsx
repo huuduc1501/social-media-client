@@ -55,7 +55,7 @@ const Wrapper = styled.div`
 
   input,
   textarea {
-    background: ${(props) => props.theme.bg};
+    background: ${(props) => props.theme.secondSurface};
     color: ${(props) => props.theme.onSurface};
     border: 0;
   }

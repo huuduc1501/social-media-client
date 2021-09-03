@@ -34,5 +34,8 @@ export default createGlobalStyle`
     .ant-divider-inner-text,.ant-divider-inner-text > *{
         color: ${(props) => props.theme.onBg};
     }
+    .ant-btn.ant-btn-loading {
+        display: flex;
+    }
 
 `;
