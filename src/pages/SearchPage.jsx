@@ -8,7 +8,7 @@ import { SEARCH_USER } from "../queries/user";
 
 import Post from "../components/post/Post";
 import { Col, Divider, Row, Skeleton } from "antd";
-import SuggestUser from "../components/SuggestUser";
+import SuggestUser from "../components/user/SuggestUser";
 
 const Wrapper = styled.div`
   .search-list > div {

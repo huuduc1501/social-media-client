@@ -6,7 +6,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 
 import { GET_ME, GET_NEW_FEED, SUGGEST_USERS } from "../queries/user";
 import Post from "../components/post/Post";
-import SuggestUser from "../components/SuggestUser";
+import SuggestUser from "../components/user/SuggestUser";
 import NewPost from "../components/post/NewPost";
 
 const Wrapper = styled.div`

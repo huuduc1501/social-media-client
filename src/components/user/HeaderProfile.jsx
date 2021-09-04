@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Button, Skeleton, Space } from "antd";
 import ToggleFollow from "../ToggleFollow";
 import Modal from "antd/lib/modal/Modal";
-import SuggestUser from "../SuggestUser";
+import SuggestUser from "./SuggestUser";
 import { useLazyQuery } from "@apollo/client";
 import { GET_FOLLOWERS, GET_FOLLOWINGS } from "../../queries/user";
 import { Options } from "../Icon";

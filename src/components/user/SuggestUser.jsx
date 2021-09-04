@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { Avatar } from "antd";
-import ToggleFollow from "./ToggleFollow";
+import ToggleFollow from "../ToggleFollow";
 import { Link } from "react-router-dom";
 
 const Wrapper = styled.div`
