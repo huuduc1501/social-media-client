@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { Button, Skeleton, Space } from "antd";
+import { useHistory } from "react-router";
 import ToggleFollow from "../ToggleFollow";
 import Modal from "antd/lib/modal/Modal";
 import SuggestUser from "./SuggestUser";
-import { useLazyQuery } from "@apollo/client";
+import { useLazyQuery, useMutation } from "@apollo/client";
 import { GET_FOLLOWERS, GET_FOLLOWINGS } from "../../queries/user";
 import { Options } from "../Icon";
 import { Link } from "react-router-dom";
+import { GET_SINGLE_CONVERSATION } from "../../queries/conversation";
 
 const Wrapper = styled.div`
   display: grid;
@@ -101,6 +103,8 @@ const Wrapper = styled.div`
 const HeaderProfile = ({ user }) => {
   const [isFollowingModalVisible, setIsFollowingModalVisible] = useState(false);
   const [isFollowerModalVisible, setIsFollowerModalVisible] = useState(false);
+  const history = useHistory();
+  const [getSingleConversationMutation] = useMutation(GET_SINGLE_CONVERSATION);
   const [getFollowings, { loading: followingsLoading, data: followingsData }] =
     useLazyQuery(GET_FOLLOWINGS, {
       fetchPolicy: "cache-first",
@@ -143,6 +147,16 @@ const HeaderProfile = ({ user }) => {
     setIsFollowingModalVisible(false);
   };
 
+  const handleOpenConversation = async () => {
+    const data = await getSingleConversationMutation({
+      variables: {
+        userId: user._id,
+      },
+    });
+    console.log();
+    history.push(`/chat/${data.data.getSingleConversation._id}`);
+  };
+
   return (
     <>
       <FollowModal
@@ -180,7 +194,8 @@ const HeaderProfile = ({ user }) => {
               </Button>
             )}
 
-            <Options />
+            <Button onClick={handleOpenConversation}>Nhắn tin</Button>
+            {/* <Options /> */}
           </div>
         </div>
         <div className="profile-bio">

@@ -150,3 +150,28 @@ export const SEARCH_USER = gql`
         }
     }
 `
+
+export const GET_CONVERSATIONS = gql`
+    ${BASIC_USER_FIELDS}
+    query getConversations($cursor:String,$limit:Int!) {
+        getConversations(cursor:$cursor,limit:$limit) {
+            paging{
+                hasMore
+                nextCursor
+            }
+            conversations {
+                _id 
+                isReaded
+                type 
+                title 
+                members {
+                    ...BasicUserFields
+                }
+                lastMessage{
+                    _id 
+                    message
+                }
+            }
+        }
+    }
+`

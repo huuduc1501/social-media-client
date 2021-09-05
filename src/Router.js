@@ -31,7 +31,7 @@ const RootRouter = () => {
   if (loading) return <Loading />
   if (error) return message.error(error.message)
   return (
-    // <WebSocketProvider>
+    <WebSocketProvider>
       <Router>
         <Navbar />
         <PageWrapper>
@@ -40,7 +40,7 @@ const RootRouter = () => {
               <Route path='/timkiem'>
                 <SearchPage />
               </Route>
-              <Route path='/chat'>
+              <Route path='/chat/:conversationId'>
                 <ChatPage />
               </Route>
               <Route path='/explore'>
@@ -65,7 +65,7 @@ const RootRouter = () => {
           </div>
         </PageWrapper>
       </Router >
-    // </WebSocketProvider>
+    </WebSocketProvider>
   );
 };
 

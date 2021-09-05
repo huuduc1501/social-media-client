@@ -1,15 +1,15 @@
-import React, { Children, createContext, useEffect, useState } from "react";
+import React, { children, createContext, useEffect, useState } from "react";
 import io from "socket.io-client";
 
 export const WebsocketContext = createContext(null);
 
-const WebSocketProvider = () => {
+const WebSocketProvider = ({ children }) => {
   const [conection, setConnection] = useState(null);
   useEffect(() => {
     const token = localStorage.getItem("token");
     try {
-      const options = { auth: { token } };
-      const socketConnection = io("http://localhost/chat", options);
+      const options = { auth: { token }, path: "/chat" };
+      const socketConnection = io("http://localhost:5000", options);
       setConnection(socketConnection);
     } catch (error) {
       console.log(error);
@@ -17,7 +17,7 @@ const WebSocketProvider = () => {
   }, []);
   return (
     <WebsocketContext.Provider value={conection}>
-      {Children}
+      {children}
     </WebsocketContext.Provider>
   );
 };
