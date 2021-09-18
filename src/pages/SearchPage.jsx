@@ -43,11 +43,11 @@ const SearchPage = () => {
               </>
             ) : (
               <>
-                {postData.searchPosts.length === 0 ? (
+                {postData?.searchPosts.length === 0 ? (
                   "Không tìm thấy bài viết"
                 ) : (
                   <>
-                    {postData.searchPosts.map((post, index) => (
+                    {postData?.searchPosts.map((post, index) => (
                       <Post key={index} post={post} />
                     ))}
                   </>

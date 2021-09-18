@@ -9,7 +9,7 @@ const WebSocketProvider = ({ children }) => {
     const token = localStorage.getItem("token");
     try {
       const options = { auth: { token }, path: "/chat" };
-      const socketConnection = io("http://localhost:5000", options);
+      const socketConnection = io(process.env.REACT_APP_API_ENDPOINT, options);
       setConnection(socketConnection);
     } catch (error) {
       console.log(error);

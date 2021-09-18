@@ -258,7 +258,7 @@ const Post = ({ post, isSpecific }) => {
   } = client.readQuery({ query: GET_ME });
 
   const [commentList, setCommentList] = useState([
-    ...post.comments.slice(0, 2),
+    ...post.comments.slice(0, 2)
   ]);
   const history = useHistory();
   const carouselRef = useRef();

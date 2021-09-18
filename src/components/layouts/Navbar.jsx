@@ -181,11 +181,11 @@ const Navbar = () => {
                 <HomeOutlined />
               </NavLink>
             </div>
-            {/* <div className="navbar-item">
+            <div className="navbar-item">
               <NavLink to="/chat" activeClassName="active">
                 <CommentOutlined />
               </NavLink>
-            </div> */}
+            </div>
             <div className="navbar-item">
               <NavLink to="/explore" activeClassName="active">
                 <ExploreOutlined />

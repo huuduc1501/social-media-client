@@ -81,10 +81,10 @@ const NewPost = () => {
       cache.modify({
         id: "ROOT_QUERY",
         fields: {
-          feed(existing) {
+          feed(exist) {
             return {
-              paging: existing.paging,
-              posts: [{ __ref: `Post:${createPost._id}` }, ...existing.posts],
+              paging: exist.paging,
+              posts: [{ __ref: `Post:${createPost._id}` }, ...exist.posts],
             };
           },
         },

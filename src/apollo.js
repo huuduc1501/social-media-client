@@ -4,11 +4,19 @@ import { setContext } from '@apollo/client/link/context';
 
 import { IS_LOGGED_IN, MODE } from "./queries/client";
 
-function merge(existing = {}, incoming) {
-    if (Object.entries(existing).length === 0)
-        return incoming
-    return { paging: incoming.paging, posts: [...existing.posts, ...incoming.posts] }
+function createMerge(path) {
+
+    function merge(existing = {}, incoming) {
+        if (Object.entries(existing).length === 0)
+            return incoming
+
+        return { paging: incoming.paging, posts: [...existing[path], ...incoming[path]] }
+    }
+    return merge
 }
+
+const postsMerge = createMerge('posts')
+const messagesMerge = createMerge('messages')
 
 export const cache = new InMemoryCache({
     typePolicies: {
@@ -20,12 +28,16 @@ export const cache = new InMemoryCache({
                     keyArgs: false,
                     // Concatenate the incoming list items with
                     // the existing list items.
-                    merge,
+                    merge: postsMerge
                 },
                 suggestPosts: {
                     keyArgs: false,
-                    merge,
-                }
+                    merge: postsMerge
+                },
+                // getMessages: {
+                //     keyArgs: true,
+                //     merge: messagesMerge
+                // }
             }
         }
     }
@@ -43,7 +55,7 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
 });
 
 const httpLink = createHttpLink({
-    uri: process.env.REACT_APP_API_ENDPOINT,
+    uri: `${process.env.REACT_APP_API_ENDPOINT}/graphql`,
 });
 
 const authLink = setContext((_, { headers }) => {

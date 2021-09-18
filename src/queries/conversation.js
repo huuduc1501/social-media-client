@@ -13,7 +13,7 @@ export const GET_MESSAGES = gql`
                 _id 
                 message
                 isMine
-                file {
+                files {
                     name
                     path
                 }
@@ -22,6 +22,7 @@ export const GET_MESSAGES = gql`
                 sender {
                     ...BasicUserFields
                 }
+                createdAt
             }
         }
     }
@@ -32,6 +33,26 @@ export const GET_SINGLE_CONVERSATION = gql`
         getSingleConversation(userId:$userId) {
             _id 
             type 
+        }
+    }
+`
+
+export const GET_SPECIFY_CONVERSATION = gql`
+    ${BASIC_USER_FIELDS}
+    query getSpecifyConversation($conversationId:ID!) {
+        getSpecifyConversation(conversationId:$conversationId) {
+            _id 
+            isReaded
+            type 
+            title 
+            members {
+                ...BasicUserFields
+            }
+            lastMessage{
+                _id 
+                message
+                isMine
+            }
         }
     }
 `

@@ -22,6 +22,7 @@ const Wrapper = styled.div`
       width: 280px !important;
     }
   }
+
 `;
 
 export const clickOutsideRef = (contentRef, toggleRef) => {

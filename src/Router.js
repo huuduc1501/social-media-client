@@ -3,6 +3,7 @@ import { message } from "antd";
 import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import styled from "styled-components";
+import ChatInput from "./components/conversation/ChatInput";
 
 import Navbar from "./components/layouts/Navbar";
 import Loading from "./components/Loading";
@@ -37,10 +38,13 @@ const RootRouter = () => {
         <PageWrapper>
           <div className="container">
             <Switch>
+              <Route path='/test'>
+                <ChatInput /> 
+              </Route>
               <Route path='/timkiem'>
                 <SearchPage />
               </Route>
-              <Route path='/chat/:conversationId'>
+              <Route path='/chat'>
                 <ChatPage />
               </Route>
               <Route path='/explore'>

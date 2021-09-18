@@ -47,7 +47,6 @@ const ToggleFollow = ({ userId, children, ...rest }) => {
         id: `User:${userId}`,
         fields: {
           isFollowing(current) {
-            console.log(current);
             return !current;
           },
         },

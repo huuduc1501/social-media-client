@@ -170,6 +170,7 @@ export const GET_CONVERSATIONS = gql`
                 lastMessage{
                     _id 
                     message
+                    isMine
                 }
             }
         }

@@ -13,6 +13,10 @@ export const lightTheme = {
     borderColor: "#DBDBDB",
     borderRadius: "12px",
     boxShadow: '0 1px 2px rgba(0,0,0,.2)',
+    messageBg: '#e4e6eb',
+    onMessage: '#050505',
+    secondMessageBg: '#0084ff',
+    onSecondMessage: '#ffffff',
 }
 
 export const darkTheme = {
@@ -29,4 +33,8 @@ export const darkTheme = {
     onSecondSurface: '#8d99a7',
     onPrimary: '#e5eaf0',
     onSecondPrimary: '#8d99a7',
+    messageBg: '#3e4042',
+    secondMessageBg: '#0084ff',
+    onMessage: '#e4e6eb',
+    onSecondMessage: '#ffffff',
 }

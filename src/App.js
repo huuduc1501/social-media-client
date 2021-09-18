@@ -15,7 +15,6 @@ import "slick-carousel/slick/slick-theme.css";
 
 const App = () => {
     const { data: { isLoggedIn } } = useQuery(IS_LOGGED_IN)
-    console.log(isLoggedIn)
 
     const { data: { mode } } = useQuery(MODE)
 

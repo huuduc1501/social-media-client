@@ -3,7 +3,8 @@ import { gql } from '@apollo/client'
 import { BASIC_USER_FIELDS, PREVIEW_POST_FIELDS, CORE_POST_FIELDS } from './fragments'
 
 export const SUGGEST_POSTS = gql`
-    ${PREVIEW_POST_FIELDS}
+    ${CORE_POST_FIELDS}
+    ${BASIC_USER_FIELDS}
     query suggestPosts($limit:Int!,$cursor:String) {
         suggestPosts(limit:$limit,cursor:$cursor) {
             paging{
@@ -11,7 +12,17 @@ export const SUGGEST_POSTS = gql`
                 nextCursor
             }
             posts {
-                ...PreviewPostFields    
+                ...CorePostFields    
+                user{
+                ...BasicUserFields
+                }
+                comments{
+                    _id 
+                    text 
+                    user {
+                    ...BasicUserFields
+                    }
+                }
             }
         }
     }
@@ -82,6 +93,13 @@ export const SEARCH_POSTS = gql`
             ...CorePostFields
             user{
                 ...BasicUserFields
+            }
+            comments{
+                _id 
+                text 
+                user{
+                    ...BasicUserFields
+                }
             }
         }
     }

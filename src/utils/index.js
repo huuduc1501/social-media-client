@@ -29,3 +29,22 @@ export const clickOutsideRef = (contentRef, toggleRef) => {
         }
     })
 }
+
+export const uploadToServer = async (files) => {
+    const fileData = new FormData()
+    files.forEach(file => {
+        if (file.type.includes('image'))
+            fileData.append('image', file.originFileObj)
+        else {
+            fileData.append('file', file.originFileObj)
+        }
+    })
+    const data = await fetch(`${process.env.REACT_APP_API_ENDPOINT}/upload`, {
+        method: 'POST',
+        body: fileData,
+        headers: {
+
+        }
+    })
+    return await data.json()
+}

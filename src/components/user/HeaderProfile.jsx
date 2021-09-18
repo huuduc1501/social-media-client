@@ -153,7 +153,6 @@ const HeaderProfile = ({ user }) => {
         userId: user._id,
       },
     });
-    console.log();
     history.push(`/chat/${data.data.getSingleConversation._id}`);
   };
 
@@ -194,7 +193,9 @@ const HeaderProfile = ({ user }) => {
               </Button>
             )}
 
-            <Button onClick={handleOpenConversation}>Nhắn tin</Button>
+            {!user.isMe && (
+              <Button onClick={handleOpenConversation}>Nhắn tin</Button>
+            )}
             {/* <Options /> */}
           </div>
         </div>
